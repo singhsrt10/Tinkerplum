@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "condition",
+    "study_id",
+    "model_version",
+    "settings_sha256",
+    "dataset_sha256",
+    "prompt_sha256",
+    "started_at",
+    "finished_at",
+    "cases",
+    "run_status",
+    "protocol_version",
+    "settings",
+    "rendered_instructions",
+    "rendered_instructions_sha256",
+    "skill_package"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "model-record-2.0.0"
+    },
+    "condition": {
+      "enum": [
+        "baseline",
+        "skill-assisted"
+      ]
+    },
+    "study_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "model_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "settings_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "prompt_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "finished_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "fixture",
+          "raw_output",
+          "findings",
+          "session_id",
+          "session_log",
+          "session_log_sha256"
+        ],
+        "properties": {
+          "fixture": {
+            "enum": [
+              "portfolio",
+              "two-user-broken",
+              "two-user-fixed",
+              "integration-failure"
+            ]
+          },
+          "raw_output": {
+            "type": "string",
+            "minLength": 1
+          },
+          "findings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "check_id",
+                "citation"
+              ],
+              "properties": {
+                "check_id": {
+                  "enum": [
+                    "HTTP-01",
+                    "HTTP-02",
+                    "HTTP-03",
+                    "AUTH-01",
+                    "AUTH-02",
+                    "AUTH-03",
+                    "AUTH-04",
+                    "AUTH-05",
+                    "AUTH-06",
+                    "AUTH-07",
+                    "CACHE-01",
+                    "CACHE-02",
+                    "API-01",
+                    "DEPLOY-01"
+                  ]
+                },
+                "citation": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          "session_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "session_log": {
+            "type": "string",
+            "minLength": 1
+          },
+          "session_log_sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        }
+      }
+    },
+    "dataset_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "run_status": {
+      "enum": [
+        "COMPLETED",
+        "NOT RUN",
+        "FAILED"
+      ]
+    },
+    "protocol_version": {
+      "const": "model-protocol-2.0.0"
+    },
+    "settings": {
+      "type": "object",
+      "minProperties": 1
+    },
+    "rendered_instructions": {
+      "type": "string",
+      "minLength": 1
+    },
+    "rendered_instructions_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "skill_package": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "files",
+            "sha256"
+          ],
+          "properties": {
+            "files": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
