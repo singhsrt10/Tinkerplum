@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, readFileSync, writeFileSync, rmSync, cpSync, symlinkSync } from 'node:fs';
+import { mkdtempSync, readFileSync, writeFileSync, rmSync, cpSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -36,7 +36,7 @@ test('historical CLI validation and linkage work in an archive without Git or fi
   try {
     cpSync(join(root, 'adapter'), join(cwd, 'adapter'), { recursive: true });
     cpSync(join(root, 'schema'), join(cwd, 'schema'), { recursive: true });
-    symlinkSync(join(root, 'node_modules'), join(cwd, 'node_modules'), 'dir');
+    cpSync(join(root, 'node_modules'), join(cwd, 'node_modules'), { recursive: true });
     // Intentionally omit .git, fixtures and runner: stored evidence must stand alone.
     rmSync(join(cwd, 'adapter', 'run.mjs'));
     for (const version of [1, 2]) {
