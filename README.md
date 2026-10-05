@@ -282,7 +282,7 @@ Linkage rejects unrelated targets, different scopes/tools, reversed run order, a
 node adapter/lifecycle-cli.mjs current reports/after.json two-user-fixed
 ```
 
-Evidence is reusable only for a clean matching revision, identical repository inputs, target, scope, environment/tool versions, and a 24-hour age window. Any changed, added, or deleted non-ignored file invalidates all checks, including documentation changes. Stale output names changed paths and returns exit code 2 with INSUFFICIENT EVIDENCE. It leaves the original report untouched. Structural validation alone does not establish freshness.
+Evidence is reusable only for a clean matching revision, identical repository inputs, target, scope, environment/tool versions, and a 24-hour age window. Any changed, added, or deleted non-ignored file invalidates all checks, including documentation changes. Stale output names changed paths and returns exit code 2 with INSUFFICIENT EVIDENCE. It leaves the original report untouched. Structural validation alone does not establish freshness. New reports use evidence schema 3.0.0; historical v1/v2 reports keep their original check semantics and require rerunning for current-protocol reuse. New links can compare different build artifacts while retaining both hashes; freshness still requires an exact artifact match. Historical validation works without a Git checkout.
 
 Work-in-progress reports can still help debugging, but a dirty working tree prevents reuse. Commit the intended changes, rerun the fixture, then check freshness. Use `--release` with `current` only when reviewing a release-scope report; it does not grant deployment access.
 

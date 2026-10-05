@@ -3,22 +3,24 @@ import { isDeepStrictEqual } from 'node:util';
 import Ajv from 'ajv/dist/2020.js';
 import addFormats from 'ajv-formats';
 import { digest } from './snapshot.mjs';
-import { catalog, applicable, critical, verdict } from './catalog.mjs';
+import * as currentProtocol from './catalog.mjs';
+import * as legacyProtocol from './catalog-legacy.mjs';
 
 const ajv = new Ajv({ allErrors: true });
 addFormats(ajv);
-const shapes = Object.fromEntries(['1', '2'].map(v => [`${v}.0.0`, ajv.compile(JSON.parse(readFileSync(new URL(`../schema/evidence-v${v}.schema.json`, import.meta.url))))]));
+const shapes = Object.fromEntries(['1', '2', '3'].map(v => [`${v}.0.0`, ajv.compile(JSON.parse(readFileSync(new URL(`../schema/evidence-v${v}.schema.json`, import.meta.url))))]));
 const requireThat = (condition, message) => { if (!condition) throw new Error(message); };
 export function validateEvidence(report) {
   const shape = shapes[report?.schema_version];
   requireThat(shape, 'Unsupported evidence schema version');
   requireThat(shape(report), `Schema: ${ajv.errorsText(shape.errors)}`);
-  if (report.schema_version === '2.0.0') {
+  if (report.schema_version !== '1.0.0') {
     const inputs = Object.fromEntries(Object.entries(report.candidate.inputs).sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0));
     requireThat(digest(JSON.stringify(inputs)) === report.candidate.source_sha256, 'Source manifest digest mismatch');
   }
   const start = Date.parse(report.started_at), end = Date.parse(report.finished_at);
   requireThat(start <= end, 'Run timestamps reversed');
+  const { catalog, applicable, critical, verdict } = report.schema_version === '3.0.0' ? currentProtocol : legacyProtocol;
   const ids = report.checks.map(c => c.id);
   requireThat(new Set(ids).size === catalog.length && catalog.every(c => ids.includes(c.id)), 'Missing, duplicate, or unknown check ID');
   for (const check of report.checks) {

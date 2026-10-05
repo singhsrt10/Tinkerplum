@@ -68,3 +68,33 @@ test('non-applicable capability cannot acquire fabricated PASS evidence', async 
   report.checks.find(c => c.id === 'AUTH-02').status = 'PASS';
   assert.throws(() => validateEvidence(report));
 });
+
+for (const version of ['1', '2']) {
+  test(`historical evidence v${version} preserves its original catalog semantics`, () => {
+    const report = JSON.parse(readFileSync(new URL(`./fixtures/evidence-v${version}.json`, import.meta.url)));
+    assert.equal(validateEvidence(report), report);
+    const auth = report.checks.find(c => c.id === 'AUTH-01');
+    assert.equal(auth.observations.length, 2);
+    assert.equal(auth.status, 'PASS');
+    const forged = structuredClone(report);
+    forged.checks.find(c => c.id === 'AUTH-01').observations[0].response.status = 200;
+    assert.throws(() => validateEvidence(forged), /unsupported PASS/);
+    report.schema_version = '3.0.0';
+    report.environment.tools.adapter = '0.3.0';
+    assert.throws(() => validateEvidence(report));
+  });
+}
+
+test('new evidence binds the revised anonymous-write protocol', async () => {
+  const report = await runFixture('two-user-fixed');
+  assert.equal(report.schema_version, '3.0.0');
+  assert.equal(report.environment.tools.adapter, '0.3.0');
+  const auth = report.checks.find(c => c.id === 'AUTH-01');
+  assert.equal(auth.observations.length, 4);
+  assert.equal(auth.observations[0].response.body, auth.observations[3].response.body);
+  auth.observations[3].response.body = JSON.stringify({ owner: 'a', value: 'unauthorized mutation' });
+  assert.throws(() => validateEvidence(report), /AUTH-01: unsupported PASS/);
+  auth.status = 'FAIL';
+  report.verdict = verdict(report.checks);
+  assert.equal(validateEvidence(report).verdict, 'NOT READY');
+});

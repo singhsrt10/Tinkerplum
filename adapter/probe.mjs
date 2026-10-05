@@ -6,8 +6,24 @@ export async function probe(origin, request) {
     headers: request.actor === 'anonymous' ? {} : { 'x-fixture-user': request.actor },
     redirect: 'error', signal: AbortSignal.timeout(2000),
   });
-  const body = await response.text();
-  if (body.length > 16384) throw new Error('Fixture response exceeds evidence limit');
+  const reader = response.body?.getReader();
+  const chunks = [];
+  let bytes = 0;
+  if (reader) {
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        bytes += value.byteLength;
+        if (bytes > 16384) {
+          await reader.cancel();
+          throw new Error('Fixture response exceeds evidence limit');
+        }
+        chunks.push(value);
+      }
+    } finally { reader.releaseLock(); }
+  }
+  const body = new TextDecoder().decode(Buffer.concat(chunks, bytes));
   return { status: response.status, body, headers: {
     'content-type': response.headers.get('content-type') ?? '',
     'cache-control': response.headers.get('cache-control') ?? '',

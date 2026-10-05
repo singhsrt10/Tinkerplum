@@ -1,4 +1,4 @@
-# Evidence adapter v0.2.0
+# Evidence adapter v0.3.0
 
 ## Audience and first stack
 
@@ -25,7 +25,7 @@ Fixture code under `fixtures/targets/` contains no expected findings. The runner
 | HTTP-01 | Homepage 200, HTML content type and heading | All |
 | HTTP-02 | Missing route returns 404 | All |
 | HTTP-03 | Referenced stylesheet returns CSS | All |
-| AUTH-01 | Anonymous read and mutation rejected | Two-user |
+| AUTH-01 | Anonymous read and mutation rejected; owner state unchanged | Two-user |
 | AUTH-02 | A and B can each read their own note | Two-user |
 | AUTH-03 | A cannot read B's note | Two-user |
 | AUTH-04 | B cannot read A's note | Two-user |
@@ -37,13 +37,13 @@ Fixture code under `fixtures/targets/` contains no expected findings. The runner
 | API-01 | Unavailable integration returns 503 and explicit failure | Integration |
 | DEPLOY-01 | Candidate-specific deployment evidence | Always NOT RUN |
 
-These IDs belong to adapter v0.2.0, not to an exhaustive standard. API-01's 503 contract and CACHE-01's no-store requirement are explicit fixture choices, not universal prescriptions for all applications. All checks except deployment are critical to the local contract. Deployment becomes critical in `--release` mode. With healthy local checks, `--release` returns INSUFFICIENT EVIDENCE. A READY local-fixture verdict never means release-ready.
+These IDs belong to adapter v0.3.0, not to an exhaustive standard. API-01's 503 contract and CACHE-01's no-store requirement are explicit fixture choices, not universal prescriptions for all applications. All checks except deployment are critical to the local contract. Deployment becomes critical in `--release` mode. With healthy local checks, `--release` returns INSUFFICIENT EVIDENCE. A READY local-fixture verdict never means release-ready.
 
 Database restores, real sessions, TLS, browser interactions, accessibility, actual CDN behavior, deployed routing, capacity, costs, and monitoring are **not run by this adapter**. They remain manual skill review areas. Their absence from this small catalog is not a pass or an N/A judgment on a real application.
 
 ## Versioned contract
 
-[schema/evidence-v2.schema.json](../schema/evidence-v2.schema.json) uses JSON Schema 2020-12. New reports use `schema_version: 2.0.0` and reject unknown fields. Historical v1 reports remain structurally readable, but their missing input manifest prevents freshness approval or new lifecycle linkage.
+[schema/evidence-v3.schema.json](../schema/evidence-v3.schema.json) uses JSON Schema 2020-12. New reports use `schema_version: 3.0.0` and reject unknown fields. Version 3 adds owner reads before and after anonymous requests to AUTH-01, so mutation followed by denial cannot pass. Historical v1/v2 reports validate against their frozen original catalog, without acquiring the stronger claim. Both require a new run for current-protocol reuse; v1 also lacks the input manifest required for lifecycle linkage. Never migrate a historical report by changing its version label.
 
 Each report includes:
 
@@ -59,9 +59,11 @@ The validator **cannot establish that recorded observations are truthful**. A pe
 
 ## Execution and exit status
 
-Use the commands in the README. Only allowlisted fixture names are accepted. Servers bind to `127.0.0.1` on random ports, use synthetic in-memory data, and close after each run. Probes have a two-second timeout and reject redirects and non-loopback origins. The target never calls an external service. Installing dependencies and CI setup can require network access; fixture execution does not.
+Use the commands in the README. Only allowlisted fixture names are accepted. Servers bind to `127.0.0.1` on random ports, use synthetic in-memory data, and close after each run. Probes have a two-second timeout and reject redirects and non-loopback origins. Response bodies are read with a 16,384-byte limit; overflow cancels the stream and produces incomplete evidence, not a partial PASS. The target never calls an external service. Installing dependencies and CI setup can require network access; fixture execution does not.
 
 The fixture command exits 0 when it successfully produces valid evidence, even if the deliberately broken fixture is NOT READY. A malformed command, invalid report, setup failure, or validation error exits 1. `npm test` compares outcomes to independent expected findings and fails if the broken example stops revealing its defects or the fixed example regresses. Do not use the fixture CLI's process status as an application release gate.
+
+Historical report and link validation works from an archive with dependencies installed, without Git or fixture executors. Collection and currentness checks still require the repository and its source identity.
 
 Reports go into ignored `reports/` files and are not committed. The adapter records full synthetic response bodies; it has no general-purpose production secret redactor. Its refusal to accept real targets is intentional.
 

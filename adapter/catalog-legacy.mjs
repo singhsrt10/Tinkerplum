@@ -1,5 +1,4 @@
-import { catalog as legacyCatalog } from './catalog-legacy.mjs';
-
+// Frozen evidence v1/v2 semantics. Do not update when changing current checks.
 // Known request plans make the evidence contract reviewable and bounded.
 const get = (path, actor = 'anonymous') => ({ method: 'GET', path, actor });
 const patch = (owner, actor) => ({ method: 'PATCH', path: `/api/records/${owner}`, actor });
@@ -16,7 +15,7 @@ export const catalog = [
   { id: 'HTTP-01', criterion: 'Homepage serves HTML', group: 'all', plan: [get('/')], pass: r => r[0].status === 200 && r[0].headers['content-type'].startsWith('text/html') && r[0].body.includes('<h1>') },
   { id: 'HTTP-02', criterion: 'Missing route returns 404', group: 'all', plan: [get('/missing')], pass: r => r[0].status === 404 },
   { id: 'HTTP-03', criterion: 'Referenced stylesheet serves CSS', group: 'all', plan: [get('/'), get('/asset.css')], pass: r => r[0].status === 200 && r[0].body.includes('href="/asset.css"') && r[1].status === 200 && r[1].headers['content-type'].startsWith('text/css') && r[1].body.includes('body') },
-  { id: 'AUTH-01', criterion: 'Anonymous read and mutation denied; owner readback unchanged', group: 'users', plan: [record('a'), record('a', 'anonymous'), patch('a', 'anonymous'), record('a')], pass: r => denied(r[1]) && denied(r[2]) && own(r[0], 'a') && own(r[3], 'a') && r[0].body === r[3].body },
+  { id: 'AUTH-01', criterion: 'Anonymous read and mutation denied', group: 'users', plan: [record('a', 'anonymous'), patch('a', 'anonymous')], pass: r => r.every(denied) },
   { id: 'AUTH-02', criterion: 'Both users can read their own record', group: 'users', plan: [record('a'), record('b')], pass: r => own(r[0], 'a') && own(r[1], 'b') },
   { id: 'AUTH-03', criterion: 'A cannot read B record', group: 'users', plan: [record('b', 'a')], pass: r => denied(r[0]) },
   { id: 'AUTH-04', criterion: 'B cannot read A record', group: 'users', plan: [record('a', 'b')], pass: r => denied(r[0]) },
@@ -38,10 +37,4 @@ export function verdict(checks) {
   if (checks.some(c => c.critical && c.status === 'FAIL')) return 'NOT READY';
   if (checks.some(c => c.critical && c.status === 'NOT RUN')) return 'INSUFFICIENT EVIDENCE';
   return 'READY';
-}
-
-export function catalogForVersion(version) {
-  if (version === '3.0.0') return catalog;
-  if (version === '1.0.0' || version === '2.0.0') return legacyCatalog;
-  throw new Error('Unsupported evidence schema version');
 }

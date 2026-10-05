@@ -11,7 +11,7 @@ const require = createRequire(import.meta.url);
 // Refuse to label cached imported modules with later on-disk source revisions.
 const loadedSource = candidate().source_sha256;
 export function toolsFor(name) {
-  return { node: process.version, adapter: '0.2.0', ajv: require('ajv/package.json').version,
+  return { node: process.version, adapter: '0.3.0', ajv: require('ajv/package.json').version,
     next: name === 'nextjs-fixed' ? require('../fixtures/nextjs/node_modules/next/package.json').version : 'not-used' };
 }
 export function environmentFor(name) {
@@ -22,7 +22,7 @@ export async function runFixture(name, scope = 'local-fixture') {
   if (candidate().source_sha256 !== loadedSource) throw new Error('Source changed since module load; start a fresh process');
   if (!['local-fixture', 'release-evidence'].includes(scope)) throw new Error('Unsupported assessment scope');
   const report = {
-    schema_version: '2.0.0', fixture: name, scope, candidate: candidate(),
+    schema_version: '3.0.0', fixture: name, scope, candidate: candidate(),
     environment: environmentFor(name),
     started_at: new Date().toISOString(), finished_at: '',
     limits: ['Synthetic local HTTP contract only; no production security claim.', 'No browser, TLS, real identity provider, database, CDN, or deployment tested.'],
