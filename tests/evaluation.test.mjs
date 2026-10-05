@@ -84,7 +84,7 @@ test('every supplied skill file changes treatment identity and stale records rej
   const { join } = await import('node:path');
   const directory = mkdtempSync(join(tmpdir(), 'tinkerplum-study-'));
   try {
-    cpSync(new URL('../production-readiness/', import.meta.url), directory, { recursive: true });
+    cpSync(new URL('../tinker-plum/', import.meta.url), directory, { recursive: true });
     const original = conditionInstructions('skill-assisted', directory);
     for (const path of Object.keys(original.skill_package.files)) {
       const file = join(directory, path), before = readFileSync(file);

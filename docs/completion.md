@@ -2,7 +2,7 @@
 
 ## Completed engineering
 
-- Portable instruction skill with unchanged `production-readiness` invocation and ten-area review.
+- Portable instruction skill named Tinker Plum with `$tinker-plum` invocation and ten-area review.
 - Pinned-source provenance/overlap review without an exhaustive originality claim or new license.
 - Core static, broken/fixed two-user, and failing-integration fixtures, with expected answers outside targets.
 - Fourteen bounded checks and v2 machine-readable evidence; v1 remains readable as historical evidence.
