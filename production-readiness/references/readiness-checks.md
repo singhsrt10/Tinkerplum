@@ -39,10 +39,11 @@ Contents: 1. Caching · 2. CDN · 3. Authentication · 4. Security · 5. Databas
 - Visitor authentication can be N/A for a public site; assess CMS/admin and integration access separately when relevant.
 - Distinguish login from permission to access an object. Enforce server-side authorization on relevant routes/actions, files, exports, background jobs, and tenant queries.
 - In an authorized environment with synthetic accounts, test anonymous, wrong-user, wrong-tenant, ordinary-user, and privileged-user cases. Hidden buttons are not access boundaries.
+- Pair denials with successful owner/authorized-user controls and verify both directions of cross-user isolation where relevant. For denied writes, compare owner-visible state before and after; inspect relevant queued or external side effects through safe mocks. A 401/403/404 response alone does not prove the operation was prevented.
 - Review the actual session/token model: verification, expiry, logout/revocation, cookie security, and CSRF defenses appropriate to credential transport. Recovery/verification must not bypass intended protection.
 - Examine throttling/enumeration in sign-in/recovery. Prefer maintained identity implementations over custom cryptography.
 
-**Evidence:** Permission model, middleware/data-access code, negative authorization tests, redacted session/provider config. Frontend-only access cannot establish backend protection.
+**Evidence:** Permission model, middleware/data-access code, paired positive/negative authorization tests with state checks, redacted session/provider config. Frontend-only access cannot establish backend protection.
 
 **Typical blocker:** Cross-user/tenant data access or privileged paths trusting client-supplied identity/role.
 
