@@ -17,6 +17,7 @@ test('exact clean evidence reusable; changed, dirty, aged, future, scope and too
     'target changed': c => { c.fixture = 'two-user-fixed'; },
     'scope changed': c => { c.scope = 'release-evidence'; },
     'tool changed': c => { c.environment.tools.node = 'v24.0.0-different'; },
+    'artifact changed': c => { c.environment.artifact_sha256 = 'a'.repeat(64); },
     'input changed': c => { c.candidate.inputs['README.md'] = 'f'.repeat(64); },
     'input deleted': c => { delete c.candidate.inputs['README.md']; },
     'new input': c => { c.candidate.inputs['new-source.js'] = 'f'.repeat(64); },
@@ -35,10 +36,9 @@ test('exact clean evidence reusable; changed, dirty, aged, future, scope and too
 });
 
 test('legacy schema is structurally readable but cannot be reused without a manifest', async () => {
-  const report = await runFixture('portfolio');
-  const current = context(report);
-  report.schema_version = '1.0.0'; delete report.candidate.inputs;
-  report.environment.tools.adapter = '0.1.0'; delete report.environment.tools.next; delete report.environment.artifact_sha256;
+  const { readFileSync } = await import('node:fs');
+  const report = JSON.parse(readFileSync(new URL('./fixtures/evidence-v1.json', import.meta.url)));
+  const current = context(await runFixture(report.fixture));
   assert.match(assessFreshness(report, current).reasons.join(' '), /Historical schema/);
 });
 
@@ -77,4 +77,29 @@ test('an unperformed check that later passes is newly verified, not a resolved d
   const link = linkReports(before, after, 'Retry unavailable local check');
   assert.equal(link.transitions[0].outcome, 'NEWLY VERIFIED');
   assert.deepEqual(link.resolved, []);
+});
+
+test('historical links keep their semantics and revised links reject mixed check protocols', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { reportHash } = await import('../adapter/lifecycle.mjs');
+  const before = JSON.parse(readFileSync(new URL('./fixtures/evidence-v2.json', import.meta.url)));
+  const after = structuredClone(before);
+  const offset = Date.parse(before.finished_at) - Date.parse(before.started_at) + 1000;
+  const shift = value => new Date(Date.parse(value) + offset).toISOString();
+  after.started_at = shift(after.started_at); after.finished_at = shift(after.finished_at);
+  for (const check of after.checks) {
+    check.started_at = shift(check.started_at); check.finished_at = shift(check.finished_at);
+    for (const observation of check.observations) observation.timestamp = shift(observation.timestamp);
+  }
+  const revised = linkReports(before, after, 'Historical recheck');
+  const historical = structuredClone(revised);
+  historical.schema_version = 'link-1.0.0'; delete historical.change.artifact_changed;
+  assert.deepEqual(validateLink(historical), historical);
+  const changed = structuredClone(historical);
+  changed.after.environment.artifact_sha256 = 'a'.repeat(64);
+  changed.after_hash = reportHash(changed.after);
+  assert.throws(() => validateLink(changed), /environment/);
+  const current = await runFixture(before.fixture);
+  assert.throws(() => linkReports(before, current, 'Different protocols'), /protocol/);
+  assert.match(assessFreshness(before, context(before), Date.parse(before.finished_at)).reasons.join(' '), /Historical check protocol/);
 });

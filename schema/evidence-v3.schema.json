@@ -1,0 +1,353 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/singhsrt10/Tinkerplum/schema/evidence-v3.schema.json",
+  "title": "Tinkerplum evidence v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "fixture",
+    "scope",
+    "candidate",
+    "environment",
+    "started_at",
+    "finished_at",
+    "limits",
+    "checks",
+    "verdict"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "3.0.0"
+    },
+    "fixture": {
+      "enum": [
+        "portfolio",
+        "two-user-broken",
+        "two-user-fixed",
+        "integration-failure",
+        "nextjs-fixed"
+      ]
+    },
+    "scope": {
+      "enum": [
+        "local-fixture",
+        "release-evidence"
+      ]
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "revision",
+        "dirty",
+        "source_sha256",
+        "inputs"
+      ],
+      "properties": {
+        "revision": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "dirty": {
+          "type": "boolean"
+        },
+        "source_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "inputs": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "propertyNames": {
+            "type": "string",
+            "pattern": "^[^\\\\]+$"
+          }
+        }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "platform",
+        "arch",
+        "tools",
+        "artifact_sha256"
+      ],
+      "properties": {
+        "kind": {
+          "const": "isolated-loopback"
+        },
+        "platform": {
+          "type": "string",
+          "minLength": 1
+        },
+        "arch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tools": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "node",
+            "adapter",
+            "ajv",
+            "next"
+          ],
+          "properties": {
+            "node": {
+              "type": "string",
+              "minLength": 1
+            },
+            "adapter": {
+              "const": "0.3.0"
+            },
+            "ajv": {
+              "type": "string",
+              "minLength": 1
+            },
+            "next": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "artifact_sha256": {
+          "type": "string",
+          "pattern": "^(not-used|[a-f0-9]{64})$"
+        }
+      }
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "finished_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "limits": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "checks": {
+      "type": "array",
+      "minItems": 14,
+      "maxItems": 14,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "criterion",
+          "critical",
+          "status",
+          "reason",
+          "limits",
+          "started_at",
+          "finished_at",
+          "observations",
+          "error"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "criterion": {
+            "type": "string",
+            "minLength": 1
+          },
+          "critical": {
+            "type": "boolean"
+          },
+          "status": {
+            "enum": [
+              "PASS",
+              "FAIL",
+              "NOT RUN",
+              "N/A"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "limits": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "finished_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "observations": {
+            "type": "array",
+            "maxItems": 10,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "request",
+                "response",
+                "source",
+                "timestamp"
+              ],
+              "properties": {
+                "request": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "method",
+                    "path",
+                    "actor"
+                  ],
+                  "properties": {
+                    "method": {
+                      "enum": [
+                        "GET",
+                        "PATCH"
+                      ]
+                    },
+                    "path": {
+                      "type": "string",
+                      "pattern": "^/[a-zA-Z0-9/.-]*$"
+                    },
+                    "actor": {
+                      "enum": [
+                        "anonymous",
+                        "a",
+                        "b"
+                      ]
+                    }
+                  }
+                },
+                "response": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "status",
+                    "headers",
+                    "body"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "minimum": 100,
+                      "maximum": 599
+                    },
+                    "headers": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "content-type",
+                        "cache-control"
+                      ],
+                      "properties": {
+                        "content-type": {
+                          "type": "string"
+                        },
+                        "cache-control": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "body": {
+                      "type": "string",
+                      "maxLength": 16384
+                    }
+                  }
+                },
+                "source": {
+                  "enum": [
+                    "origin",
+                    "synthetic-cache"
+                  ]
+                },
+                "timestamp": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "request",
+                  "message"
+                ],
+                "properties": {
+                  "request": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "method",
+                      "path",
+                      "actor"
+                    ],
+                    "properties": {
+                      "method": {
+                        "enum": [
+                          "GET",
+                          "PATCH"
+                        ]
+                      },
+                      "path": {
+                        "type": "string",
+                        "pattern": "^/[a-zA-Z0-9/.-]*$"
+                      },
+                      "actor": {
+                        "enum": [
+                          "anonymous",
+                          "a",
+                          "b"
+                        ]
+                      }
+                    }
+                  },
+                  "message": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "verdict": {
+      "enum": [
+        "READY",
+        "NOT READY",
+        "INSUFFICIENT EVIDENCE"
+      ]
+    }
+  }
+}

@@ -3,6 +3,9 @@ import assert from 'node:assert/strict';
 import { runFixture } from '../adapter/run.mjs';
 import { startFixture } from '../fixtures/server.mjs';
 import { probe } from '../adapter/probe.mjs';
+import { assessFreshness, linkReports, validateLink } from '../adapter/lifecycle.mjs';
+import { execFileSync } from 'node:child_process';
+import { root } from '../adapter/snapshot.mjs';
 test('production-built Next.js route handlers satisfy the fixed synthetic contract', async () => {
   const report = await runFixture('nextjs-fixed');
   assert.equal(report.environment.tools.next, '16.3.8');
@@ -38,4 +41,23 @@ test('Next.js rejects modified compiled output and stale source stamps', async (
     writeFileSync(stamp, JSON.stringify(changed));
     await assert.rejects(startFixture('nextjs-fixed'), /build is stale/);
   } finally { rmSync(marker, { force: true }); writeFileSync(stamp, original); }
+});
+
+test('two genuine Next.js builds can be linked while prior artifact evidence remains stale', async () => {
+  const before = await runFixture('nextjs-fixed');
+  execFileSync(process.execPath, ['scripts/next-build.mjs'], { cwd: root, env: process.env, timeout: 120000, stdio: 'pipe' });
+  const after = await runFixture('nextjs-fixed');
+  assert.notEqual(before.environment.artifact_sha256, after.environment.artifact_sha256);
+  const link = linkReports(before, after, 'Rebuild the same source; no defect resolution or causal claim');
+  assert.equal(link.change.kind, 'artifact-change');
+  assert.equal(link.change.artifact_changed, true);
+  assert.equal(link.before.environment.artifact_sha256, before.environment.artifact_sha256);
+  assert.equal(link.after.environment.artifact_sha256, after.environment.artifact_sha256);
+  assert.deepEqual(validateLink(link), link);
+  assert.deepEqual(link.resolved, []);
+  const prior = structuredClone(before); prior.candidate.dirty = false;
+  const current = { fixture: prior.fixture, scope: prior.scope, candidate: prior.candidate, environment: after.environment };
+  assert.match(assessFreshness(prior, current, Date.parse(after.finished_at)).reasons.join(' '), /Environment/);
+  const tampered = structuredClone(link); tampered.change.artifact_changed = false;
+  assert.throws(() => validateLink(tampered), /metadata/);
 });

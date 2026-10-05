@@ -1,6 +1,6 @@
 {
   "name": "tinkerplum-evidence-fixtures",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -8,7 +8,7 @@
   },
   "scripts": {
     "check": "node scripts/check.mjs",
-    "test": "node --test tests/adapter.test.mjs tests/boundaries.test.mjs tests/cli.test.mjs tests/lifecycle.test.mjs tests/evaluation.test.mjs tests/install.test.mjs",
+    "test": "node --test tests/adapter.test.mjs tests/boundaries.test.mjs tests/cli.test.mjs tests/lifecycle.test.mjs tests/evaluation.test.mjs tests/install.test.mjs tests/probe.test.mjs",
     "fixtures": "node adapter/cli.mjs all",
     "validate": "node adapter/cli.mjs validate",
     "verify": "npm run check && npm test && npm run fixtures",

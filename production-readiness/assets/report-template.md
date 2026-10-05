@@ -11,6 +11,18 @@
 - Top risks: [finding IDs]
 - Decision owner: [known or unassigned]
 
+## Journey coverage and evidence freshness
+
+| Journey/capability | Actor, entry point, permission boundary | Data/side effects, failure/recovery | Sample and rationale | Evidence, gaps, next check |
+| --- | --- | --- | --- | --- |
+| | | | | |
+
+- Coverage boundary: [routes/capabilities inspected; important uncovered paths and limits]
+- Controls: [legitimate success; denied access; unchanged state after denied writes where applicable]
+- Stopping decision: [critical gates supported or explicitly unresolved; why further sampling would or would not change the verdict]
+- Reused evidence: [original candidate/environment/date, relevant configuration identities, what still matches]
+- Rechecks needed: [changed artifact, identity/provider settings, migrations or other relevant dependencies; no universal expiry]
+
 ## Area summary
 
 Use PASS, FAIL, NOT RUN, or N/A. Split mixed evidence into individual checks; never conceal a failed critical check in a passing summary.

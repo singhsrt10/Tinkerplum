@@ -1,0 +1,707 @@
+{
+  "schema_version": "2.0.0",
+  "fixture": "two-user-fixed",
+  "scope": "local-fixture",
+  "candidate": {
+    "revision": "bdd08d3df2711c0fb837e235aff3597e3c773457",
+    "dirty": false,
+    "source_sha256": "d01c0b1407c49f425c44e745b37e90300165a5dd4cb92bfcd350a75e7a44c89e",
+    "inputs": {
+      ".github/workflows/verify.yml": "d1fd4c22414e294aabab5ec11ec5697c6bff45b37e5728f70722ffc1295e52ee",
+      ".gitignore": "e42501854715890be1d506c24d12e5ff5e1b1d65ee16a48877a5eade536ce376",
+      "README.md": "402745bf59349e90871988819c67ec6a01e3e78cae5ae989a2d117cf7bba8861",
+      "adapter/catalog.mjs": "f57ea84f8509ca74a564feb544155a09fa225117da20052511064b50cf1f925a",
+      "adapter/cli.mjs": "c7cd92276606d874b2706444dad1ff2d012d56bb6032958aa031ca6b0ac2286b",
+      "adapter/lifecycle-cli.mjs": "dc411e01326ec4c7f31afdcfda2eaed732b5ab03156d7937f13f1ea2c827187e",
+      "adapter/lifecycle.mjs": "0e57fe12fa8d623d114311c4aae4c263281998ae0759fe9006d553355e6d647f",
+      "adapter/next-build-state.mjs": "051f810142e0467152b06ddd943f20a47a56d93c7484d3f895428ab47750478f",
+      "adapter/probe.mjs": "d655c57e8b24f97a30fa5d5546038b45608082eea8960b509de38cc806b14a3c",
+      "adapter/run.mjs": "ccab9576d51294f438417aa10f458c6a52ecdf36778db7cd269ae2f8213fd4d0",
+      "adapter/snapshot.mjs": "9087a0916d2378e544558a55d899f7ab29c657d88c320b2422ed8cf5c4c41627",
+      "adapter/validate.mjs": "735a0dffadcd2d482e370fa9d6412e240d15874e0f5ba4f3d68d94ae882d33e4",
+      "docs/completion.md": "e70ac4f82b4a6c3ae30704f44f537faee0b41809e4fac844e2416404d77833c3",
+      "docs/evaluation.md": "3b1ac73c3e5d6a8693c7828ee2760ffa2ea2ae2fed8ba77429a12899edee8763",
+      "docs/evidence.md": "43fbe1aad5ec681d50b98c2fd19eda7a618194d77ed85bb5850ba0a1e4f41095",
+      "docs/lifecycle.md": "70c4988c3ca6589b68e32e8113bcf88297cd3cafe921537765e6179df7ad008e",
+      "docs/provenance.md": "0a27b853e968532a5f61acab6f6506565b2c48a01c3581ef5f156575fce4ec0a",
+      "evaluation/baseline.mjs": "232579162e4b5d15263600536f382799df0da4e0569440c750bab6e029f1b7ec",
+      "evaluation/prompts/baseline.txt": "4e48b491a6220942363d0c5b1af86a6f2fad09fc35f778236be85826abbab253",
+      "evaluation/prompts/skill-assisted.txt": "57fca6717fd7c37043cf338c384f7098127b159d90f550a3d26360d5a67de5ef",
+      "evaluation/run.mjs": "9290cb9d9ffc88b19ef34a346099a7331d6a60479631978dfb87fe464f5a2b76",
+      "evaluation/score-model.mjs": "d30a6488cf3b01d578614bef17877fdec267c308ba0bda3773eb078af4a49537",
+      "fixtures/next-runner.mjs": "f235ce66803a2b7494fbbb5bf8ca4f26b00d55a08324f121f88ae57a74816b1f",
+      "fixtures/nextjs/app/api/[...path]/route.js": "4de0cc7dd58305d46336c060cbec715e4821fda0a4750f2fcd9f75794b6bf620",
+      "fixtures/nextjs/app/layout.js": "929c3fae062194d5c7255124155f04890470fe83b5cceb145c1680f554128f2f",
+      "fixtures/nextjs/app/page.js": "3601b4389b1a9ba2affb3692b8ff66ffa54800b93db747932f3fde8587c50df3",
+      "fixtures/nextjs/next.config.mjs": "2f328726f90b64a2ff47c017c525d5ca66472d21f92517438062c31d4e62c294",
+      "fixtures/nextjs/package-lock.json": "26fa36b85c94e0f283cd9418deca8e7cea18c269a0a89458bd8fb06252113cdb",
+      "fixtures/nextjs/package.json": "bd644d57b28db145426a36c809fa340dea41eaf4a1d11c27de16ca237cce63c9",
+      "fixtures/nextjs/public/asset.css": "dfbe670b43347451c49e5609e6212277981493aedc96d1358a8dadeabcf64269",
+      "fixtures/nextjs/server.mjs": "90cc3f11e9546b9fc323336769354ec3cef2682540a3af06a97b8b8a7b8d09b8",
+      "fixtures/server.mjs": "2997d2f73f8e5db21132b8c49afe67f31eefdd5decfa5c0eb09050f0cf0d5379",
+      "fixtures/targets/integration/app.mjs": "75eea0418e40c1fe2d957b4a0b2f301ef9b5cf7a9260be4da476eb89e031ab2b",
+      "fixtures/targets/portfolio/asset.css": "dfbe670b43347451c49e5609e6212277981493aedc96d1358a8dadeabcf64269",
+      "fixtures/targets/portfolio/index.html": "d052f145c79f3e742d296b2aa3ab4f34cc180d94cf356b4bd66616fa807ae9aa",
+      "fixtures/targets/two-user/app.mjs": "5fde7a8a8372c682bc782f679801e339411fe49c85a65c7751af7af5dbf43f81",
+      "package-lock.json": "d03ee90630e82394e16a84a1ffd5cf3d5b5ba63f99cae2a40a860836731989cc",
+      "package.json": "6e3016741dfb828652b70d0174d0eaaf8e42232d621c59558862bb494cec8dbb",
+      "production-readiness/SKILL.md": "be0b6daf6fcd91378c0619584b5bfec3f4e1c68ca8979414e7bb8fb3d4b1cc54",
+      "production-readiness/agents/openai.yaml": "ee4775611aed42b70f20c8eb53f2a7443e1292a34e5a8d78272978fc6be07591",
+      "production-readiness/assets/report-template.md": "019e98e61fd4e7186d50c05a4b4d4534c58d5af53bc5a08425ee6307e6bd0da2",
+      "production-readiness/references/optional-adapter.md": "b0830876e7697d7784012be1999fc04448e1362ddf62a2abd36ce6e172df4543",
+      "production-readiness/references/readiness-checks.md": "4a758aada39c31df44e3f8100ab075eaab6cdf0ec62cb8e3b40afc439fb761b1",
+      "production-readiness/references/release-gates.md": "6e5b0fe4f1e7e8d555b96fc1b609667b2f411ddf9958a73a5e05202675de13df",
+      "schema/evidence-v1.schema.json": "ecc80a555183eb5b2201398def5f84273b01bccfe11e5af83c08b3cc762e7f9c",
+      "schema/evidence-v2.schema.json": "8c89cda061c4b4e8b10efaf254d14bfdbd6e3bf2ce23ddc1d65eaeb15bc1066b",
+      "schema/model-record-v1.schema.json": "f842d03eccf578e2df39c82db1b2ddfef64f02eabf07e7a08465297c3f7a6a76",
+      "scripts/check.mjs": "2d3f41a44a420912de9111ed15c41ed76397906e1c27e96f75742a95315e1e59",
+      "scripts/next-build.mjs": "0d93a267f59a04f47480aae3757321604f0bbf717a9a97c376ba7076ebfa6825",
+      "tests/adapter.test.mjs": "dbd59d5cf43a6249f183c3aab20bec02e4dc64a00a8cf3b21a35627a8c7807c1",
+      "tests/boundaries.test.mjs": "26ff92d238c4d47fc602d532a905a4ab5a37478fb1386dc92cd065a2f76357c8",
+      "tests/cli.test.mjs": "d28a916072a0423316323953a9f3b4d1bef934c0518db9308b3174236da5bc8e",
+      "tests/evaluation.test.mjs": "c9d36e83ebf8bd8ae6267ed0eb9b968d841b2b071b74ad49267d4d568d33b126",
+      "tests/expected.json": "303fe230f7b70fe077cfb70ad258f93ef1a0ba367b29d7c2b3b52da64b1f9907",
+      "tests/install.test.mjs": "a78a3b308e2acd4b26309aefb2a1cfeb3de08dcde2faa10bf3bfe9e36599a62b",
+      "tests/lifecycle.test.mjs": "c6a0c63aac2c5f5b1e30602e0dde8f755fa6ceb604fe649a43d9b847909e77e7",
+      "tests/next.test.mjs": "96e153577f1811fb0889d7f6827c9066c445abad3b6eb3b98dc9532a40670669"
+    }
+  },
+  "environment": {
+    "kind": "isolated-loopback",
+    "platform": "darwin",
+    "arch": "arm64",
+    "tools": {
+      "node": "v25.2.1",
+      "adapter": "0.2.0",
+      "ajv": "8.17.1",
+      "next": "not-used"
+    },
+    "artifact_sha256": "not-used"
+  },
+  "started_at": "2026-10-05T18:15:56.920Z",
+  "finished_at": "2026-10-05T18:15:56.954Z",
+  "limits": [
+    "Synthetic local HTTP contract only; no production security claim.",
+    "No browser, TLS, real identity provider, database, CDN, or deployment tested."
+  ],
+  "checks": [
+    {
+      "id": "HTTP-01",
+      "criterion": "Homepage serves HTML",
+      "critical": true,
+      "status": "PASS",
+      "reason": "Observed responses meet this bounded criterion.",
+      "limits": [
+        "Only the listed requests and synthetic identities are covered."
+      ],
+      "started_at": "2026-10-05T18:15:56.920Z",
+      "finished_at": "2026-10-05T18:15:56.922Z",
+      "observations": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/",
+            "actor": "anonymous"
+          },
+          "response": {
+            "status": 200,
+            "body": "<!doctype html>\n<html lang=\"en\">\n<head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Synthetic portfolio</title><link rel=\"stylesheet\" href=\"/asset.css\"></head>\n<body><main><h1>Synthetic portfolio</h1><p>A local demonstration with no accounts, forms, or external services.</p></main></body>\n</html>\n",
+            "headers": {
+              "content-type": "text/html; charset=utf-8",
+              "cache-control": "no-store"
+            }
+          },
+          "source": "origin",
+          "timestamp": "2026-10-05T18:15:56.922Z"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "HTTP-02",
+      "criterion": "Missing route returns 404",
+      "critical": true,
+      "status": "PASS",
+      "reason": "Observed responses meet this bounded criterion.",
+      "limits": [
+        "Only the listed requests and synthetic identities are covered."
+      ],
+      "started_at": "2026-10-05T18:15:56.922Z",
+      "finished_at": "2026-10-05T18:15:56.922Z",
+      "observations": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/missing",
+            "actor": "anonymous"
+          },
+          "response": {
+            "status": 404,
+            "body": "{\"error\":\"not found\"}",
+            "headers": {
+              "content-type": "application/json",
+              "cache-control": "no-store"
+            }
+          },
+          "source": "origin",
+          "timestamp": "2026-10-05T18:15:56.922Z"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "HTTP-03",
+      "criterion": "Referenced stylesheet serves CSS",
+      "critical": true,
+      "status": "PASS",
+      "reason": "Observed responses meet this bounded criterion.",
+      "limits": [
+        "Only the listed requests and synthetic identities are covered."
+      ],
+      "started_at": "2026-10-05T18:15:56.922Z",
+      "finished_at": "2026-10-05T18:15:56.923Z",
+      "observations": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/",
+            "actor": "anonymous"
+          },
+          "response": {
+            "status": 200,
+            "body": "<!doctype html>\n<html lang=\"en\">\n<head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Synthetic portfolio</title><link rel=\"stylesheet\" href=\"/asset.css\"></head>\n<body><main><h1>Synthetic portfolio</h1><p>A local demonstration with no accounts, forms, or external services.</p></main></body>\n</html>\n",
+            "headers": {
+              "content-type": "text/html; charset=utf-8",
+              "cache-control": "no-store"
+            }
+          },
+          "source": "origin",
+          "timestamp": "2026-10-05T18:15:56.923Z"
+        },
+        {
+          "request": {
+            "method": "GET",
+            "path": "/asset.css",
+            "actor": "anonymous"
+          },
+          "response": {
+            "status": 200,
+            "body": "body { font-family: sans-serif; max-width: 60ch; margin: 2rem auto; padding: 1rem; color: #222; background: #fff; }\n",
+            "headers": {
+              "content-type": "text/css",
+              "cache-control": "no-store"
+            }
+          },
+          "source": "origin",
+          "timestamp": "2026-10-05T18:15:56.923Z"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "AUTH-01",
+      "criterion": "Anonymous read and mutation denied",
+      "critical": true,
+      "status": "PASS",
+      "reason": "Observed responses meet this bounded criterion.",
+      "limits": [
+        "Only the listed requests and synthetic identities are covered."
+      ],
+      "started_at": "2026-10-05T18:15:56.923Z",
+      "finished_at": "2026-10-05T18:15:56.924Z",
+      "observations": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/records/a",
+            "actor": "anonymous"
+          },
+          "response": {
+            "status": 401,
+            "body": "{\"error\":\"unauthenticated\"}",
+            "headers": {
+              "content-type": "application/json",
+              "cache-control": "no-store"
+            }
+          },
+          "source": "origin",
+          "timestamp": "2026-10-05T18:15:56.923Z"
+        },
+        {
+          "request": {
+            "method": "PATCH",
+            "path": "/api/records/a",
+            "actor": "anonymous"
+          },
+          "response": {
+            "status": 401,
+            "body": "{\"error\":\"unauthenticated\"}",
+            "headers": {
+              "content-type": "application/json",
+              "cache-control": "no-store"
+            }
+          },
+          "source": "origin",
+          "timestamp": "2026-10-05T18:15:56.924Z"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "AUTH-02",
+      "criterion": "Both users can read their own record",
+      "critical": true,
+      "status": "PASS",
+      "reason": "Observed responses meet this bounded criterion.",
+      "limits": [
+        "Only the listed requests and synthetic identities are covered."
+      ],
+      "started_at": "2026-10-05T18:15:56.924Z",
+      "finished_at": "2026-10-05T18:15:56.924Z",
+      "observations": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/records/a",
+            "actor": "a"
+          },
+          "response": {
+            "status": 200,
+            "body": "{\"owner\":\"a\",\"value\":\"A synthetic note\"}",
+            "headers": {
+              "content-type": "application/json",
+              "cache-control": "private, no-store"
+            }
+          },
+          "source": "origin",
+          "timestamp": "2026-10-05T18:15:56.924Z"
+        },
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/records/b",
+            "actor": "b"
+          },
+          "response": {
+            "status": 200,
+            "body": "{\"owner\":\"b\",\"value\":\"B synthetic note\"}",
+            "headers": {
+              "content-type": "application/json",
+              "cache-control": "private, no-store"
+            }
+          },
+          "source": "origin",
+          "timestamp": "2026-10-05T18:15:56.924Z"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "AUTH-03",
+      "criterion": "A cannot read B record",
+      "critical": true,
+      "status": "PASS",
+      "reason": "Observed responses meet this bounded criterion.",
+      "limits": [
+        "Only the listed requests and synthetic identities are covered."
+      ],
+      "started_at": "2026-10-05T18:15:56.924Z",
+      "finished_at": "2026-10-05T18:15:56.925Z",
+      "observations": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/records/b",
+            "actor": "a"
+          },
+          "response": {
+            "status": 403,
+            "body": "{\"error\":\"forbidden\"}",
+            "headers": {
+              "content-type": "application/json",
+              "cache-control": "no-store"
+            }
+          },
+          "source": "origin",
+          "timestamp": "2026-10-05T18:15:56.924Z"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "AUTH-04",
+      "criterion": "B cannot read A record",
+      "critical": true,
+      "status": "PASS",
+      "reason": "Observed responses meet this bounded criterion.",
+      "limits": [
+        "Only the listed requests and synthetic identities are covered."
+      ],
+      "started_at": "2026-10-05T18:15:56.925Z",
+      "finished_at": "2026-10-05T18:15:56.925Z",
+      "observations": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/records/a",
+            "actor": "b"
+          },
+          "response": {
+            "status": 403,
+            "body": "{\"error\":\"forbidden\"}",
+            "headers": {
+              "content-type": "application/json",
+              "cache-control": "no-store"
+            }
+          },
+          "source": "origin",
+          "timestamp": "2026-10-05T18:15:56.925Z"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "AUTH-05",
+      "criterion": "A cannot mutate B record; owner readback unchanged",
+      "critical": true,
+      "status": "PASS",
+      "reason": "Observed responses meet this bounded criterion.",
+      "limits": [
+        "Only the listed requests and synthetic identities are covered."
+      ],
+      "started_at": "2026-10-05T18:15:56.925Z",
+      "finished_at": "2026-10-05T18:15:56.926Z",
+      "observations": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/records/b",
+            "actor": "b"
+          },
+          "response": {
+            "status": 200,
+            "body": "{\"owner\":\"b\",\"value\":\"B synthetic note\"}",
+            "headers": {
+              "content-type": "application/json",
+              "cache-control": "private, no-store"
+            }
+          },
+          "source": "origin",
+          "timestamp": "2026-10-05T18:15:56.925Z"
+        },
+        {
+          "request": {
+            "method": "PATCH",
+            "path": "/api/records/b",
+            "actor": "a"
+          },
+          "response": {
+            "status": 403,
+            "body": "{\"error\":\"forbidden\"}",
+            "headers": {
+              "content-type": "application/json",
+              "cache-control": "no-store"
+            }
+          },
+          "source": "origin",
+          "timestamp": "2026-10-05T18:15:56.925Z"
+        },
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/records/b",
+            "actor": "b"
+          },
+          "response": {
+            "status": 200,
+            "body": "{\"owner\":\"b\",\"value\":\"B synthetic note\"}",
+            "headers": {
+              "content-type": "application/json",
+              "cache-control": "private, no-store"
+            }
+          },
+          "source": "origin",
+          "timestamp": "2026-10-05T18:15:56.926Z"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "AUTH-06",
+      "criterion": "B cannot mutate A record; owner readback unchanged",
+      "critical": true,
+      "status": "PASS",
+      "reason": "Observed responses meet this bounded criterion.",
+      "limits": [
+        "Only the listed requests and synthetic identities are covered."
+      ],
+      "started_at": "2026-10-05T18:15:56.926Z",
+      "finished_at": "2026-10-05T18:15:56.926Z",
+      "observations": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/records/a",
+            "actor": "a"
+          },
+          "response": {
+            "status": 200,
+            "body": "{\"owner\":\"a\",\"value\":\"A synthetic note\"}",
+            "headers": {
+              "content-type": "application/json",
+              "cache-control": "private, no-store"
+            }
+          },
+          "source": "origin",
+          "timestamp": "2026-10-05T18:15:56.926Z"
+        },
+        {
+          "request": {
+            "method": "PATCH",
+            "path": "/api/records/a",
+            "actor": "b"
+          },
+          "response": {
+            "status": 403,
+            "body": "{\"error\":\"forbidden\"}",
+            "headers": {
+              "content-type": "application/json",
+              "cache-control": "no-store"
+            }
+          },
+          "source": "origin",
+          "timestamp": "2026-10-05T18:15:56.926Z"
+        },
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/records/a",
+            "actor": "a"
+          },
+          "response": {
+            "status": 200,
+            "body": "{\"owner\":\"a\",\"value\":\"A synthetic note\"}",
+            "headers": {
+              "content-type": "application/json",
+              "cache-control": "private, no-store"
+            }
+          },
+          "source": "origin",
+          "timestamp": "2026-10-05T18:15:56.926Z"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "AUTH-07",
+      "criterion": "Both owners can mutate and read back their record",
+      "critical": true,
+      "status": "PASS",
+      "reason": "Observed responses meet this bounded criterion.",
+      "limits": [
+        "Only the listed requests and synthetic identities are covered."
+      ],
+      "started_at": "2026-10-05T18:15:56.926Z",
+      "finished_at": "2026-10-05T18:15:56.927Z",
+      "observations": [
+        {
+          "request": {
+            "method": "PATCH",
+            "path": "/api/records/a",
+            "actor": "a"
+          },
+          "response": {
+            "status": 200,
+            "body": "{\"owner\":\"a\",\"value\":\"updated by a\"}",
+            "headers": {
+              "content-type": "application/json",
+              "cache-control": "private, no-store"
+            }
+          },
+          "source": "origin",
+          "timestamp": "2026-10-05T18:15:56.927Z"
+        },
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/records/a",
+            "actor": "a"
+          },
+          "response": {
+            "status": 200,
+            "body": "{\"owner\":\"a\",\"value\":\"updated by a\"}",
+            "headers": {
+              "content-type": "application/json",
+              "cache-control": "private, no-store"
+            }
+          },
+          "source": "origin",
+          "timestamp": "2026-10-05T18:15:56.927Z"
+        },
+        {
+          "request": {
+            "method": "PATCH",
+            "path": "/api/records/b",
+            "actor": "b"
+          },
+          "response": {
+            "status": 200,
+            "body": "{\"owner\":\"b\",\"value\":\"updated by b\"}",
+            "headers": {
+              "content-type": "application/json",
+              "cache-control": "private, no-store"
+            }
+          },
+          "source": "origin",
+          "timestamp": "2026-10-05T18:15:56.927Z"
+        },
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/records/b",
+            "actor": "b"
+          },
+          "response": {
+            "status": 200,
+            "body": "{\"owner\":\"b\",\"value\":\"updated by b\"}",
+            "headers": {
+              "content-type": "application/json",
+              "cache-control": "private, no-store"
+            }
+          },
+          "source": "origin",
+          "timestamp": "2026-10-05T18:15:56.927Z"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "CACHE-01",
+      "criterion": "Both personalized responses prohibit storage",
+      "critical": true,
+      "status": "PASS",
+      "reason": "Observed responses meet this bounded criterion.",
+      "limits": [
+        "Only the listed requests and synthetic identities are covered."
+      ],
+      "started_at": "2026-10-05T18:15:56.927Z",
+      "finished_at": "2026-10-05T18:15:56.928Z",
+      "observations": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/me",
+            "actor": "a"
+          },
+          "response": {
+            "status": 200,
+            "body": "{\"owner\":\"a\",\"value\":\"updated by a\"}",
+            "headers": {
+              "content-type": "application/json",
+              "cache-control": "private, no-store"
+            }
+          },
+          "source": "origin",
+          "timestamp": "2026-10-05T18:15:56.928Z"
+        },
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/me",
+            "actor": "b"
+          },
+          "response": {
+            "status": 200,
+            "body": "{\"owner\":\"b\",\"value\":\"updated by b\"}",
+            "headers": {
+              "content-type": "application/json",
+              "cache-control": "private, no-store"
+            }
+          },
+          "source": "origin",
+          "timestamp": "2026-10-05T18:15:56.928Z"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "CACHE-02",
+      "criterion": "A then B remain isolated through synthetic shared cache",
+      "critical": true,
+      "status": "PASS",
+      "reason": "Observed responses meet this bounded criterion.",
+      "limits": [
+        "Only the listed requests and synthetic identities are covered.",
+        "URL-keyed cache model only; not an RFC-complete CDN or browser."
+      ],
+      "started_at": "2026-10-05T18:15:56.928Z",
+      "finished_at": "2026-10-05T18:15:56.929Z",
+      "observations": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/me",
+            "actor": "a"
+          },
+          "response": {
+            "status": 200,
+            "body": "{\"owner\":\"a\",\"value\":\"updated by a\"}",
+            "headers": {
+              "content-type": "application/json",
+              "cache-control": "private, no-store"
+            }
+          },
+          "source": "origin",
+          "timestamp": "2026-10-05T18:15:56.929Z"
+        },
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/me",
+            "actor": "b"
+          },
+          "response": {
+            "status": 200,
+            "body": "{\"owner\":\"b\",\"value\":\"updated by b\"}",
+            "headers": {
+              "content-type": "application/json",
+              "cache-control": "private, no-store"
+            }
+          },
+          "source": "origin",
+          "timestamp": "2026-10-05T18:15:56.929Z"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "API-01",
+      "criterion": "Unavailable dependency produces explicit unsuccessful response",
+      "critical": true,
+      "status": "N/A",
+      "reason": "Bundled two-user-fixed fixture has no integration capability.",
+      "limits": [
+        "Only the listed requests and synthetic identities are covered."
+      ],
+      "started_at": "2026-10-05T18:15:56.929Z",
+      "finished_at": "2026-10-05T18:15:56.929Z",
+      "observations": [],
+      "error": null
+    },
+    {
+      "id": "DEPLOY-01",
+      "criterion": "Deployment evidence available for candidate",
+      "critical": false,
+      "status": "NOT RUN",
+      "reason": "No deployment exists or is contacted by this adapter.",
+      "limits": [
+        "A release decision requires separate candidate-specific deployment evidence."
+      ],
+      "started_at": "2026-10-05T18:15:56.929Z",
+      "finished_at": "2026-10-05T18:15:56.929Z",
+      "observations": [],
+      "error": null
+    }
+  ],
+  "verdict": "READY"
+}

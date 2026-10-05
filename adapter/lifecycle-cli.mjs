@@ -1,13 +1,11 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { runFixture, environmentFor } from './run.mjs';
-import { candidate } from './snapshot.mjs';
 import { assessFreshness, linkReports, validateLink } from './lifecycle.mjs';
-import { supportedFixtures } from '../fixtures/server.mjs';
 const read = path => JSON.parse(readFileSync(path, 'utf8'));
 const save = (path, value) => writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`, { mode: 0o600 });
 try {
   const [command, ...args] = process.argv.slice(2);
   if (command === 'example' && !args.length) {
+    const { runFixture } = await import('./run.mjs');
     mkdirSync('reports', { recursive: true });
     const before = await runFixture('two-user-broken');
     const after = await runFixture('two-user-fixed');
@@ -21,7 +19,11 @@ try {
     console.log(`Linked evidence written to ${output}`);
   } else if (command === 'validate-link' && args.length === 1) {
     validateLink(read(args[0])); console.log('Linkage validated against embedded before/after evidence');
-  } else if (command === 'current' && [2, 3].includes(args.length) && (!args[2] || args[2] === '--release') && supportedFixtures.includes(args[1])) {
+  } else if (command === 'current' && [2, 3].includes(args.length) && (!args[2] || args[2] === '--release')) {
+    const { supportedFixtures } = await import('../fixtures/server.mjs');
+    if (!supportedFixtures.includes(args[1])) throw new Error('Only bundled synthetic fixtures are supported');
+    const { environmentFor } = await import('./run.mjs');
+    const { candidate } = await import('./snapshot.mjs');
     const current = { candidate: candidate(), fixture: args[1], scope: args[2] ? 'release-evidence' : 'local-fixture',
       environment: environmentFor(args[1]) };
     const result = assessFreshness(read(args[0]), current);

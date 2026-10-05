@@ -1,4 +1,7 @@
 import test from 'node:test';
+import { createServer } from 'node:http';
+import { once } from 'node:events';
+import { catalog, catalogForVersion } from '../adapter/catalog.mjs';
 import assert from 'node:assert/strict';
 import { startFixture } from '../fixtures/server.mjs';
 import { probe, sharedCache } from '../adapter/probe.mjs';
@@ -55,3 +58,38 @@ test('fixture runner rejects URLs and unknown targets before opening a server', 
   await assert.rejects(probe('https://example.com', { method: 'GET', path: '/', actor: 'anonymous' }), /Loopback/);
   await assert.rejects(probe('http://127.0.0.1:1', { method: 'GET', path: '//example.com', actor: 'anonymous' }), /Loopback/);
 });
+
+// A response-only denial is insufficient: this local mutant writes before returning 401.
+for (const mutateBeforeDenial of [false, true]) {
+  test(`anonymous denial detects persisted side effects: mutant=${mutateBeforeDenial}`, async () => {
+    let value = 'original';
+    const server = createServer((request, response) => {
+      response.setHeader('content-type', 'application/json');
+      const actor = request.headers['x-fixture-user'];
+      if (!actor) {
+        if (mutateBeforeDenial && request.method === 'PATCH') value = 'unauthorized mutation';
+        response.writeHead(401).end(JSON.stringify({ error: 'unauthenticated' }));
+      } else {
+        response.end(JSON.stringify({ owner: 'a', value }));
+      }
+    });
+    server.listen(0, '127.0.0.1');
+    await once(server, 'listening');
+    const origin = `http://127.0.0.1:${server.address().port}`;
+    try {
+      const rule = catalog.find(c => c.id === 'AUTH-01');
+      const observations = [];
+      for (const request of rule.plan) observations.push(await probe(origin, request));
+      assert.equal(observations[1].status, 401);
+      assert.equal(observations[2].status, 401);
+      assert.equal(JSON.parse(observations[3].body).value, mutateBeforeDenial ? 'unauthorized mutation' : 'original');
+      assert.equal(rule.pass(observations), !mutateBeforeDenial);
+      // Preserve the historical contract without upgrading its narrower claim.
+      const legacy = catalogForVersion('2.0.0').find(c => c.id === 'AUTH-01');
+      assert.equal(legacy.pass(observations.slice(1, 3)), true);
+    } finally {
+      server.closeAllConnections();
+      await new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve()));
+    }
+  });
+}
