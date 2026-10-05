@@ -11,7 +11,7 @@ function walk(dir) {
 for (const path of ['adapter', 'fixtures', 'tests', 'scripts', 'evaluation'].flatMap(walk).filter(p => p.endsWith('.mjs'))) {
   execFileSync(process.execPath, ['--check', path]);
 }
-for (const file of ['README.md', ...walk('docs'), ...walk('production-readiness')].filter(p => p.endsWith('.md'))) {
+for (const file of ['README.md', ...walk('docs'), ...walk('tinker-plum')].filter(p => p.endsWith('.md'))) {
   const text = readFileSync(file, 'utf8');
   if (text.includes('\u2014')) throw new Error(`${file}: em dash found`);
   for (const [, link] of text.matchAll(/\]\(([^)]+)\)/g)) {

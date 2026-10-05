@@ -9,7 +9,7 @@ import { compare } from './compare.mjs';
 const ajv = new Ajv({ allErrors: true }); addFormats(ajv);
 const shape = ajv.compile(JSON.parse(readFileSync(new URL('../schema/model-record-v2.schema.json', import.meta.url))));
 const truth = JSON.parse(readFileSync(new URL('../tests/expected.json', import.meta.url)));
-const skillRoot = fileURLToPath(new URL('../production-readiness/', import.meta.url));
+const skillRoot = fileURLToPath(new URL('../tinker-plum/', import.meta.url));
 export const protocolVersion = 'model-protocol-2.0.0';
 export function canonicalJson(value) {
   if (Array.isArray(value)) return `[${value.map(canonicalJson).join(',')}]`;

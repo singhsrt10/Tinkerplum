@@ -1,9 +1,9 @@
 ---
-name: production-readiness
+name: tinker-plum
 description: Audit website or web-app production readiness, prioritize launch blockers, and verify authorized fixes across delivery, identity, data, APIs, testing, deployment, and operations. Use for launch reviews, production hardening, or release go/no-go checks; not routine feature work or an exhaustive penetration test.
 ---
 
-# Production Readiness
+# Tinker Plum
 
 Turn “ready to ship?” into an evidence-backed, proportionate release decision. Adapt to the actual stack, users, failure cost, and hosting model. This review is not a security certification or permission to change production.
 

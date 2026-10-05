@@ -14,7 +14,7 @@ function setup(t) {
   const archive = join(temp, 'extracted source');
   mkdirSync(join(archive, 'scripts'), { recursive: true });
   cpSync(join(root, 'scripts/install-skill.mjs'), join(archive, 'scripts/install-skill.mjs'));
-  cpSync(join(root, 'production-readiness'), join(archive, 'production-readiness'), { recursive: true });
+  cpSync(join(root, 'tinker-plum'), join(archive, 'tinker-plum'), { recursive: true });
   const run = (...args) => spawnSync(process.execPath, [join(archive, 'scripts/install-skill.mjs'), ...args],
     { cwd: temp, encoding: 'utf8', timeout: 10000 });
   return { temp, archive, run };
@@ -24,10 +24,10 @@ for (const mode of ['--project', '--dest']) {
     const { temp, archive, run } = setup(t);
     const target = join(temp, 'destination with spaces');
     if (mode === '--project') mkdirSync(target);
-    const dest = join(target, ...(mode === '--project' ? ['.agents', 'skills'] : []), 'production-readiness');
+    const dest = join(target, ...(mode === '--project' ? ['.agents', 'skills'] : []), 'tinker-plum');
     const result = run(mode, target);
     assert.equal(result.status, 0, result.stderr);
-    const source = join(archive, 'production-readiness');
+    const source = join(archive, 'tinker-plum');
     assert.deepEqual(files(dest), files(source));
     for (const path of files(source)) assert.deepEqual(readFileSync(join(dest, path)), readFileSync(join(source, path)));
     writeFileSync(join(dest, 'SKILL.md'), 'local customization');
@@ -46,13 +46,25 @@ test('installer rejects invalid arguments and a missing project without creating
 });
 test('installer refuses recursive destinations and existing files', t => {
   const { temp, archive, run } = setup(t);
-  const source = join(archive, 'production-readiness');
+  const source = join(archive, 'tinker-plum');
   const before = files(source);
   assert.equal(run('--dest', source).status, 1);
   assert.equal(run('--dest', join(source, 'nested')).status, 1);
   assert.deepEqual(files(source), before);
-  const dest = join(temp, 'production-readiness');
+  const dest = join(temp, 'tinker-plum');
   writeFileSync(dest, 'keep');
   assert.equal(run('--dest', temp).status, 1);
   assert.equal(readFileSync(dest, 'utf8'), 'keep');
+});
+
+test('rename refuses a legacy installation without touching customizations or creating duplicates', t => {
+  const { temp, run } = setup(t);
+  const legacy = join(temp, 'production-readiness');
+  mkdirSync(legacy);
+  writeFileSync(join(legacy, 'SKILL.md'), 'local customization');
+  const result = run('--dest', temp);
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /Legacy production-readiness installation/);
+  assert.equal(readFileSync(join(legacy, 'SKILL.md'), 'utf8'), 'local customization');
+  assert.equal(existsSync(join(temp, 'tinker-plum')), false);
 });

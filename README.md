@@ -1,6 +1,6 @@
 # Tinkerplum
 
-Production-readiness review instructions for Codex. The installed skill is named **`production-readiness`**.
+Production-readiness review instructions for Codex. The skill is displayed as **Tinker Plum**, with technical name **`tinker-plum`** and invocation **`$tinker-plum`**. Codex skill identifiers use lowercase letters and hyphens; the display name can contain spaces. The repository remains **Tinkerplum**.
 
 The skill guides repository inspection, safe verification, prioritized findings, and release decisions. It adapts the review to the application's stack, data, critical journeys, and failure consequences.
 
@@ -8,7 +8,7 @@ The skill guides repository inspection, safe verification, prioritized findings,
 
 | Component | Purpose | Requirements |
 | --- | --- | --- |
-| `production-readiness/` | Instruction skill, reference guides, and report template | A host that loads Codex skills; access to the application and its tools |
+| `tinker-plum/` | Instruction skill, reference guides, and report template | A host that loads Codex skills; access to the application and its tools |
 | `scripts/install-skill.mjs` | Optional portable file-copy installer | Node.js 24+; no npm packages, Git, or network required |
 | Evidence adapter | Reproducible tests against bundled synthetic applications | Git checkout, Node.js 24+, npm dependencies, and loopback server permission |
 
@@ -30,8 +30,8 @@ Choose the route supported by the Codex environment where the skill will run.
 In a Codex environment that provides the installer, request:
 
 ```text
-Use $skill-installer to install production-readiness from the
-singhsrt10/Tinkerplum GitHub repository, path production-readiness.
+Use $skill-installer to install tinker-plum from the
+singhsrt10/Tinkerplum GitHub repository, path tinker-plum.
 ```
 
 The built-in installer determines its supported destination and access requirements. Verify that the installed skill appears in the destination environment's selector. For a specific version, include the desired Git commit or tag in the request.
@@ -45,7 +45,7 @@ git clone https://github.com/singhsrt10/Tinkerplum.git
 cd Tinkerplum
 ```
 
-Read [SKILL.md](production-readiness/SKILL.md), then run **one** command from the repository root. These commands use the same Node.js script in PowerShell, Command Prompt, Bash, and Zsh; no shell-specific copy command is required.
+Read [SKILL.md](tinker-plum/SKILL.md), then run **one** command from the repository root. These commands use the same Node.js script in PowerShell, Command Prompt, Bash, and Zsh; no shell-specific copy command is required.
 
 **Personal installation** into the current execution user's `.agents/skills` directory:
 
@@ -65,28 +65,28 @@ node scripts/install-skill.mjs --project "path/to/website-repository"
 node scripts/install-skill.mjs --dest "path/to/skills-directory"
 ```
 
-Replace the example paths with actual paths. Windows paths such as `C:\Projects\Website` are accepted on Windows. Relative paths are resolved from the current working directory. `--dest` names the parent skills directory; the installer appends `production-readiness`.
+Replace the example paths with actual paths. Windows paths such as `C:\Projects\Website` are accepted on Windows. Relative paths are resolved from the current working directory. `--dest` names the parent skills directory; the installer appends `tinker-plum`.
 
 The installer copies the complete skill, refuses existing destinations, and prevents copying into its own source folder. It does not update host configuration, install dependencies, or contact the network. A custom destination must be one the host actually scans.
 
 ### Manual installation
 
-Copy the complete `production-readiness` folder, including `agents/`, `references/`, and `assets/`, into one destination:
+Copy the complete `tinker-plum` folder, including `agents/`, `references/`, and `assets/`, into one destination:
 
 | Scope | Destination |
 | --- | --- |
-| Personal | `<user-home>/.agents/skills/production-readiness` |
-| Project | `<website-repository>/.agents/skills/production-readiness` |
-| Custom | `<host-configured-skills-directory>/production-readiness` |
+| Personal | `<user-home>/.agents/skills/tinker-plum` |
+| Project | `<website-repository>/.agents/skills/tinker-plum` |
+| Custom | `<host-configured-skills-directory>/tinker-plum` |
 
-Use Finder, File Explorer, or a Linux file manager. A typical Windows personal path is `C:\Users\<username>\.agents\skills\production-readiness`. Check that `SKILL.md` is directly inside the installed folder, with no extra nested copy. Do not merge over an existing installation; preserve local changes first.
+Use Finder, File Explorer, or a Linux file manager. A typical Windows personal path is `C:\Users\<username>\.agents\skills\tinker-plum`. Check that `SKILL.md` is directly inside the installed folder, with no extra nested copy. Do not merge over an existing installation; preserve local changes first.
 
 ### Cloud, remote hosts, and containers
 
 Install in the filesystem **where Codex executes**, not necessarily on the computer displaying its UI.
 
 - For a writable remote workspace, run the portable installer there or copy the skill to its supported directory.
-- For repository-based cloud work, commit a reviewed project copy under `.agents/skills/production-readiness` if the host supports repository skill discovery.
+- For repository-based cloud work, commit a reviewed project copy under `.agents/skills/tinker-plum` if the host supports repository skill discovery.
 - For ephemeral containers or workspaces, provision the folder through the image or setup process; a one-time copy may disappear when the workspace is recreated.
 - For managed interfaces without filesystem access, use the host's supported skill or plugin import mechanism. This repository's local installer cannot add a capability the host does not expose, and this repository is not a published plugin.
 
@@ -94,7 +94,7 @@ WSL uses its own Linux filesystem and user home. Install there when that is wher
 
 ### Verify discovery
 
-Open the application project and select `production-readiness` from the skill selector. In Codex CLI or the IDE extension, use `/skills` or `$production-readiness`. In the ChatGPT desktop skill interface, use `@` to select the skill. Restart the host if it does not discover the files.
+Open the application project and select **Tinker Plum** (`tinker-plum`) from the skill selector. In Codex CLI or the IDE extension, use `/skills` or `$tinker-plum`. In the ChatGPT desktop skill interface, use `@` to select the skill. Restart the host if it does not discover the files.
 
 Paths and invocation follow [OpenAI's skills documentation](https://learn.chatgpt.com/docs/build-skills), checked on 2026-10-06. Avoid duplicate personal and project copies unless duplicate selector entries are intentional.
 
@@ -145,7 +145,7 @@ Start in the **application repository**, not Tinkerplum. Supply the intended env
 **Audit**
 
 ```text
-Use $production-readiness to audit this application for production readiness.
+Use $tinker-plum to audit this application for production readiness.
 Inspect the repository and run safe local checks. Do not edit or deploy.
 Report prioritized findings, evidence, checks not run, and next steps.
 ```
@@ -153,7 +153,7 @@ Report prioritized findings, evidence, checks not run, and next steps.
 **Fix selected findings**
 
 ```text
-Use $production-readiness to fix findings <IDs> from this project's review.
+Use $tinker-plum to fix findings <IDs> from this project's review.
 Make minimal changes and verify the affected behavior. Report remaining gaps.
 Do not deploy or change production settings or data.
 ```
@@ -161,7 +161,7 @@ Do not deploy or change production settings or data.
 **Assess a release**
 
 ```text
-Use $production-readiness to assess <commit/artifact> for <environment>.
+Use $tinker-plum to assess <commit/artifact> for <environment>.
 Evaluate critical journeys, CI evidence, recovery, and operational readiness.
 Return a verdict with evidence gaps. Do not deploy.
 ```
@@ -177,7 +177,7 @@ Return a verdict with evidence gaps. Do not deploy.
 
 The overall verdict is **READY**, **NOT READY**, or **INSUFFICIENT EVIDENCE** for the defined scope. A demonstrated blocker means NOT READY. A decision-critical evidence gap prevents READY. Accepted risks remain separate from passing checks.
 
-Reports identify the candidate and environment, prioritized findings, supporting evidence, sampled paths, limitations, and next actions. Use the [report template](production-readiness/assets/report-template.md) for saved assessments and [release gates](production-readiness/references/release-gates.md) for release decisions.
+Reports identify the candidate and environment, prioritized findings, supporting evidence, sampled paths, limitations, and next actions. Use the [report template](tinker-plum/assets/report-template.md) for saved assessments and [release gates](tinker-plum/references/release-gates.md) for release decisions.
 
 The skill does not certify security or compliance, replace a penetration test, or guarantee detection of every defect. Model-assisted effectiveness and real-project false-positive rates have not been established by the bundled tests. Local PASS does not establish deployed behavior.
 
@@ -240,11 +240,11 @@ The deterministic evaluation compares three smoke checks with the full fixture p
 
 | Path | Contents |
 | --- | --- |
-| [production-readiness/SKILL.md](production-readiness/SKILL.md) | Workflow, modes, and permission boundaries |
-| [Investigation guide](production-readiness/references/investigation-guide.md) | Journey tracing, sampling, and evidence reuse |
-| [Readiness checks](production-readiness/references/readiness-checks.md) | Ten-area criteria |
-| [Worked examples](production-readiness/references/worked-examples.md) | Fictional assessments illustrating the method |
-| `production-readiness/agents/openai.yaml` | Display metadata and default prompt |
+| [tinker-plum/SKILL.md](tinker-plum/SKILL.md) | Workflow, modes, and permission boundaries |
+| [Investigation guide](tinker-plum/references/investigation-guide.md) | Journey tracing, sampling, and evidence reuse |
+| [Readiness checks](tinker-plum/references/readiness-checks.md) | Ten-area criteria |
+| [Worked examples](tinker-plum/references/worked-examples.md) | Fictional assessments illustrating the method |
+| `tinker-plum/agents/openai.yaml` | Display metadata and default prompt |
 | `adapter/`, `schema/` | Collection, validation, and versioned formats |
 | `fixtures/`, `tests/`, `evaluation/` | Synthetic applications, regression tests, and evaluation |
 | [Evidence guide](docs/evidence.md) | Evidence contract and 14-check catalog |
@@ -253,6 +253,12 @@ The deterministic evaluation compares three smoke checks with the full fixture p
 | [Completion status](docs/completion.md) | Completed engineering and unperformed validation |
 | [Provenance](docs/provenance.md) | Influences and scope of the originality review |
 
+## Migrate the previous skill name
+
+Existing `production-readiness` installations must be migrated before installing `tinker-plum` in the same skills directory. Compare the old copy for local customizations, then move only that folder to a unique backup **outside all scanned skills directories**. Do not overwrite another `tinker-plum` installation or merge folders blindly. Install the complete new folder, verify discovery as **Tinker Plum**, and use `$tinker-plum`. Keep the backup for rollback and reconcile customizations explicitly; do not leave both names in discovery paths.
+
+Historical evidence fixtures retain their original paths and hashes, including the previous name. They are historical records, not active installation references. The renamed skill and updated evaluation prompt produce new treatment hashes; do not rewrite older study records to match.
+
 ## Update or remove
 
 1. Preserve local changes in the clone and installed skill.
@@ -260,7 +266,7 @@ The deterministic evaluation compares three smoke checks with the full fixture p
 3. Compare the new skill folder with the installed copy. Updating the clone does not update copied installations.
 4. Move the old installed folder to a backup **outside scanned skill directories**, then install the new complete folder and verify discovery.
 
-To uninstall, move only the installed `production-readiness` folder outside the host's scanned directories. Keep unrelated skills and project files. Remove the backup when no longer needed. For a host-managed installation, use that host's removal mechanism.
+To uninstall, move only the installed `tinker-plum` folder outside the host's scanned directories. Keep unrelated skills and project files. Remove the backup when no longer needed. For a host-managed installation, use that host's removal mechanism.
 
 ## Troubleshooting
 

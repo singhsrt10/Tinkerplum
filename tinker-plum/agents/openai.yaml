@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tinker Plum"
+  short_description: "Audit website launch risks and verify safe fixes"
+  default_prompt: "Use $tinker-plum to audit this website for launch, prioritize blockers, and report evidence without changing files."
