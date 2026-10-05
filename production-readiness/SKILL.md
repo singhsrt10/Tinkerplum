@@ -55,3 +55,7 @@ For implementation, state the small change set and risks, follow existing conven
 For release decisions, read [release-gates.md](references/release-gates.md). Separate local code assessment from deployed readiness. Require appropriate evidence for critical journeys, permissions/data isolation, recoverability, and release observation. Return **READY**, **NOT READY**, or **INSUFFICIENT EVIDENCE** for the defined scope; keep final release authority with the user/designated owner.
 
 Use [report-template.md](assets/report-template.md) for a comprehensive written review; adapt its size to the task. A short review can stay concise with the same evidence distinctions. Lead with verdict and top risks; include all ten areas for a full audit, prioritized fixes, checks not run, applicable recovery requirements, and decisions needed. Keep security details in a restricted destination.
+
+## Optional synthetic evidence adapter
+
+For a request to exercise this skill's reproducible examples, read [optional-adapter.md](references/optional-adapter.md). The adapter is optional and is kept in the Tinkerplum repository, not the installed skill folder. It only supports bundled synthetic fixtures. Never run it against a real project or interpret its local READY verdict as production approval. Continue using the ten-area review for actual projects; unsupported automated checks remain NOT RUN unless separate evidence establishes them.

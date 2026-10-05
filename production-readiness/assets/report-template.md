@@ -49,6 +49,10 @@ Use PASS, FAIL, NOT RUN, or N/A. Split mixed evidence into individual checks; ne
 
 Include actual commands/results, checks not run and why, external settings not inspected, and pre-existing failures. Redact sensitive output. Configuration and test existence are not runtime evidence.
 
+## Optional machine-readable evidence
+
+When using the Tinkerplum synthetic adapter, link the report and record its schema version, candidate revision/dirty state/source digest, environment/tool versions, timestamps, and limits. Validate it with the matching validator. Keep local-fixture results separate from any release decision; internal consistency is not proof of authenticity or deployed behavior. If no adapter was run, say so rather than inventing a report.
+
 ## Changes (implementation mode)
 
 - Files/reasons: [minimal scope]

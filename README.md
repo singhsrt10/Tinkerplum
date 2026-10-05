@@ -6,7 +6,7 @@ Tinkerplum is an instruction-only Codex skill that reviews production readiness,
 
 **Tinkerplum is the repository name. `production-readiness` is the skill name.** Keep the installed folder and invocation as `production-readiness`; the selector may display **Production Readiness**.
 
-[Install](#install) · [First audit](#run-your-first-audit) · [Understand results](#understand-results) · [Update or remove](#update-or-remove) · [Troubleshooting](#troubleshooting)
+[Install](#install) · [Run synthetic examples](#optional-reproducible-evidence-examples) · [First audit](#run-your-first-audit) · [Understand results](#understand-results) · [Update or remove](#update-or-remove) · [Troubleshooting](#troubleshooting)
 
 ## What it does
 
@@ -14,9 +14,15 @@ Tinkerplum is an instruction-only Codex skill that reviews production readiness,
 - **Implement when requested:** make bounded fixes, add relevant regression coverage, and report verification results.
 - **Assess a release:** evaluate a specific candidate and environment, including missing evidence and recovery needs.
 
-There is no install-time code, bundled scanner, API key, subscription, or package dependency. Your Codex access and the tools required by the website itself are separate prerequisites. The skill guides Codex; it is not a standalone program you run in a terminal.
+The instruction skill has no install-time code, bundled scanner, API key, subscription, or package dependency. This repository also includes an optional Node.js fixture adapter with two pinned validation dependencies; it is not copied when you install the skill. Your Codex access and the tools required by the website itself are separate prerequisites. The skill guides Codex; it is not a standalone program you run in a terminal.
 
 It does not deploy your application, provision infrastructure, certify security or compliance, or replace a specialist penetration test. It does not require every website to have accounts, a database, Redis, or Kubernetes.
+
+## Who this milestone is for
+
+The first executable milestone targets solo developers and small teams learning to verify a simple Node.js site's HTTP access and caching boundaries. Its runnable examples use **Node.js 24+ core HTTP, plain HTML/CSS, and in-memory synthetic data**. The instruction skill still supports broader stack-aware manual reviews.
+
+The adapter accepts only bundled fixtures. It cannot scan your website, Next.js app, or a production URL. Next.js-specific support is deferred; [the scope decision](docs/evidence.md#audience-and-first-stack) explains why this small repository starts with a minimal HTTP contract. [The provenance review](docs/provenance.md) documents overlap and influences without claiming exhaustive originality.
 
 ## The ten review areas
 
@@ -47,10 +53,13 @@ Tinkerplum/
     │   └── openai.yaml                  # Display name and default prompt
     ├── references/
     │   ├── readiness-checks.md          # Ten-area investigation guide
-    │   └── release-gates.md             # Decisions and recovery requirements
+    │   ├── release-gates.md             # Decisions and recovery requirements
+    │   └── optional-adapter.md          # Optional synthetic evidence workflow
     └── assets/
         └── report-template.md          # Evidence-based review structure
 ```
+
+The optional development tools live separately in `adapter/`, `schema/`, `fixtures/`, and `tests/`. Expected findings are in `tests/expected.json`, outside the target applications. See [the evidence contract and check catalog](docs/evidence.md) for their structure and limits.
 
 ## Install
 
@@ -195,6 +204,73 @@ Expect prioritized findings, file or command evidence, the revision/environment 
 
 For a saved review, ask Codex to use [the report template](production-readiness/assets/report-template.md) and specify a private destination. [Release gates](production-readiness/references/release-gates.md) explain recovery and final decision criteria.
 
+## Optional reproducible evidence examples
+
+These examples are for the **Tinkerplum clone**, not your website directory or the installed skill folder. They start temporary servers only on `127.0.0.1`, use invented users and notes, and stop automatically. They never deploy, contact an integration provider, or accept arbitrary target URLs. Do not deploy the intentionally broken targets.
+
+### 1. Prepare the optional tools
+
+Use Node.js 24 or newer and npm. From the Tinkerplum repository root:
+
+```sh
+node --version
+npm --version
+npm ci --ignore-scripts --no-audit --no-fund
+```
+
+Dependency installation uses the npm registry. `--ignore-scripts` prevents dependency lifecycle scripts. No npm installation is needed for the instruction-only skill. Node's standard test runner and Ajv JSON Schema validation provide the underlying tools.
+
+### 2. Run all validation and examples
+
+```sh
+npm run verify
+```
+
+This runs JavaScript syntax checks, the regression suite, and all four fixture variants. It does not run a TypeScript compiler, browser audit, or app build; this plain JavaScript package has none of those build targets.
+
+| Case | Expected local verdict | What it demonstrates |
+| --- | --- | --- |
+| `portfolio` | READY | HTML, stylesheet delivery, and missing-route behavior only |
+| `two-user-broken` | NOT READY | Cross-user reads/writes and shared-cache leakage |
+| `two-user-fixed` | READY | Both user directions blocked, owners still work, private responses not shared |
+| `integration-failure` | NOT READY | Unavailable dependency incorrectly reported as success; deployment NOT RUN |
+
+**READY here means the small local fixture contract passed. It does not mean a real website is ready for production.** All variants record unavailable deployment evidence as NOT RUN.
+
+### 3. Inspect a single case and its evidence
+
+```sh
+node adapter/cli.mjs two-user-broken
+npm run validate -- reports/two-user-broken.json
+```
+
+Open `reports/two-user-broken.json`. Check the revision, dirty state, source digest, environment/tool versions, timestamps, limits, and request/response observations. The broken case should fail `AUTH-03` through `AUTH-06`, `CACHE-01`, and `CACHE-02`. The validator rejects unsupported PASS claims, incomplete evidence, and a verdict that contradicts the observations.
+
+Reports are ignored by Git. Their full response bodies are safe only because these targets contain synthetic data. Validation checks internal consistency; it cannot prove that someone has not fabricated the entire report.
+
+### 4. See how missing release evidence changes the decision
+
+```sh
+node adapter/cli.mjs portfolio --release
+npm run validate -- reports/portfolio-release.json
+```
+
+The verdict is **INSUFFICIENT EVIDENCE**: healthy local responses do not supply deployment evidence. No deployment is contacted by `--release`; it only makes that missing evidence decision-critical.
+
+The CLI exits successfully when evidence is produced and validated, even for a deliberately NOT READY fixture. `npm test` fails on mismatches against the expected findings. Do not use the fixture command's exit status as a release approval.
+
+### Development and CI
+
+```sh
+npm run check
+npm test
+npm run fixtures
+```
+
+The GitHub workflow repeats the aggregate checks on Node 24 with read-only repository permissions. This is synthetic regression coverage, not a production security certification. There are no paid services, scanners, deployment credentials, or license changes in this milestone.
+
+Fix/recheck history, stale-evidence enforcement, framework adapters, comparative benchmarks, and real-project pilots are future work. [Evidence documentation](docs/evidence.md) lists unsupported areas and the schema's trust limitations.
+
 ## Update or remove
 
 ### Update without losing local changes
@@ -226,6 +302,7 @@ Locate the personal or project installation you chose. Move **only its `producti
 | Referenced guide or template is missing | Copy the whole folder, including `references/`, `assets/`, and `agents/`. |
 | `$Tinkerplum` is not found | Invoke `$production-readiness`; Tinkerplum is the repository brand. |
 | Review examines this skill instead of your website | Open the website repository and start the audit there. |
+| Optional fixture commands fail | Run from the clone with Node 24+ and `npm ci` completed. Check loopback permission and Git availability; do not point the adapter at a real URL. |
 | Tests or builds cannot run | Provide the project's required runtime/dependencies and safe test configuration. The report should say NOT RUN, not pretend the check passed. |
 | Production checks are missing | Supply authorized environment access or dated evidence. Local files alone cannot establish remote state. |
 | Git fails on macOS with an Xcode license error | Resolve the developer-tools setup in your own terminal, or use GitHub's ZIP download. The skill does not require Xcode. |
@@ -237,6 +314,8 @@ Keep credentials, customer data, and client-specific reports out of this public 
 The skill instructs Codex to redact secrets, avoid destructive checks, inspect commands before running them, and honor host permissions. Uploading project material to a new external service requires authorization. Deployment, production data changes, access settings, paid infrastructure, and load testing require appropriate explicit scope and approval. Never bypass an approval denial to complete a review.
 
 A review can expose sensitive implementation details. Store it in an appropriately restricted location and review it before sharing. Audit mode is the default; application edits require an implementation request.
+
+The optional adapter is deliberately restricted to synthetic fixtures and is not an authorization to scan other systems.
 
 ## Maintenance and licensing
 
