@@ -1,0 +1,15 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+.venv/
+.idea/
+.vscode/
+# Keep credentials, project reviews, and generated bundles out of this repo.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+reports/
+artifacts/
+*.zip

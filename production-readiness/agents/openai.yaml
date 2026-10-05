@@ -1,0 +1,4 @@
+interface:
+  display_name: "Production Readiness"
+  short_description: "Audit website launch risks and verify safe fixes"
+  default_prompt: "Use $production-readiness to audit this website for launch, prioritize blockers, and report evidence without changing files."
