@@ -1,0 +1,1 @@
+Review the supplied local synthetic application for readiness risks. Inspect its files and run only safe, bounded local checks. Do not edit files, contact remote services, deploy, or read evaluation answers. Return findings with evidence and checks not run. Do not invent a numeric security score. You have no additional readiness skill for this condition.

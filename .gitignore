@@ -13,3 +13,6 @@ __pycache__/
 reports/
 artifacts/
 *.zip
+node_modules/
+coverage/
+.next/

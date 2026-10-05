@@ -1,0 +1,6 @@
+{
+  "portfolio": { "verdict": "READY", "failures": [], "not_run": ["DEPLOY-01"] },
+  "two-user-broken": { "verdict": "NOT READY", "failures": ["AUTH-03", "AUTH-04", "AUTH-05", "AUTH-06", "CACHE-01", "CACHE-02"], "not_run": ["DEPLOY-01"] },
+  "two-user-fixed": { "verdict": "READY", "failures": [], "not_run": ["DEPLOY-01"] },
+  "integration-failure": { "verdict": "NOT READY", "failures": ["API-01"], "not_run": ["DEPLOY-01"] }
+}

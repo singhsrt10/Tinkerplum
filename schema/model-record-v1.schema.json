@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "condition",
+    "study_id",
+    "model_version",
+    "settings_sha256",
+    "dataset_sha256",
+    "prompt_sha256",
+    "started_at",
+    "finished_at",
+    "cases",
+    "run_status"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "model-record-1.0.0"
+    },
+    "condition": {
+      "enum": [
+        "baseline",
+        "skill-assisted"
+      ]
+    },
+    "study_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "model_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "settings_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "prompt_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "finished_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "fixture",
+          "raw_output",
+          "findings"
+        ],
+        "properties": {
+          "fixture": {
+            "enum": [
+              "portfolio",
+              "two-user-broken",
+              "two-user-fixed",
+              "integration-failure"
+            ]
+          },
+          "raw_output": {
+            "type": "string",
+            "minLength": 1
+          },
+          "findings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "check_id",
+                "citation"
+              ],
+              "properties": {
+                "check_id": {
+                  "enum": [
+                    "HTTP-01",
+                    "HTTP-02",
+                    "HTTP-03",
+                    "AUTH-01",
+                    "AUTH-02",
+                    "AUTH-03",
+                    "AUTH-04",
+                    "AUTH-05",
+                    "AUTH-06",
+                    "AUTH-07",
+                    "CACHE-01",
+                    "CACHE-02",
+                    "API-01",
+                    "DEPLOY-01"
+                  ]
+                },
+                "citation": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "dataset_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "run_status": {
+      "enum": [
+        "COMPLETED",
+        "NOT RUN",
+        "FAILED"
+      ]
+    }
+  }
+}
