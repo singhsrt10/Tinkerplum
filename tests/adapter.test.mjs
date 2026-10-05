@@ -44,7 +44,7 @@ test('semantic validator rejects inconsistent and unsupported claims', async t =
     'wrong verdict': r => { r.verdict = 'READY'; },
     'missing candidate': r => { delete r.candidate; },
     'invented numeric score': r => { r.score = 100; },
-    'unknown schema version': r => { r.schema_version = '2.0.0'; },
+    'unknown schema version': r => { r.schema_version = '99.0.0'; },
     'invalid timestamp': r => { r.started_at = 'yesterday'; },
     'out of range timestamp': r => { r.checks[0].observations[0].timestamp = '2000-01-01T00:00:00Z'; },
     'contradictory cache provenance': r => { r.checks.find(c => c.id === 'CACHE-02').observations[1].source = 'origin'; },

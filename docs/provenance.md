@@ -21,8 +21,10 @@ Both inspected repositories identify MIT licensing. That observation neither ass
 
 These are acknowledged influences, not endorsements. Descriptions above are paraphrases. Upstream source was inspected as reference material, not installed or executed.
 
+- [Next.js Route Handlers](https://nextjs.org/docs/app/api-reference/file-conventions/route) and [self-hosting guidance](https://nextjs.org/docs/app/guides/self-hosting): informed the independent pinned Next.js fixture and production build. The tested boundary is local HTTP route behavior, not a hosting certification.
+
 ## Differentiation that can actually be demonstrated
 
 The first milestone provides three repeatable synthetic cases, a small explicit check catalog, raw local HTTP observations, and a validator that rejects internally unsupported PASS claims. Expected findings are kept in `tests/expected.json`, outside the target applications. This makes behavior reviewable without submitting a project to an external audit service.
 
-It does not establish superior detection coverage, original ownership of general security ideas, framework support, or production effectiveness. A broader comparison, real-project pilot, benchmark, stale-evidence policy, and fix/recheck history remain future work. New source use should be documented here, with license decisions brought to the owner separately.
+It does not establish superior detection coverage, original ownership of general security ideas, broad framework coverage, or production effectiveness. The continuation adds a conservative stale-evidence policy, bounded fix/recheck linkage, and a deterministic protocol comparison. Broader benchmarks, real-project pilots, and actual model-assisted effectiveness measurements remain unperformed. New source use should be documented here, with license decisions brought to the owner separately.

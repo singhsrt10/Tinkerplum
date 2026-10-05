@@ -1,15 +1,27 @@
 {
   "name": "tinkerplum-evidence-fixtures",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=24" },
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "check": "node scripts/check.mjs",
-    "test": "node --test tests/*.test.mjs",
+    "test": "node --test tests/adapter.test.mjs tests/boundaries.test.mjs tests/cli.test.mjs tests/lifecycle.test.mjs tests/evaluation.test.mjs tests/install.test.mjs",
     "fixtures": "node adapter/cli.mjs all",
     "validate": "node adapter/cli.mjs validate",
-    "verify": "npm run check && npm test && npm run fixtures"
+    "verify": "npm run check && npm test && npm run fixtures",
+    "next:install": "npm --prefix fixtures/nextjs ci --ignore-scripts --no-audit --no-fund",
+    "next:build": "node scripts/next-build.mjs",
+    "next:test": "node --test tests/next.test.mjs",
+    "next:verify": "npm run next:build && npm run next:test",
+    "evaluate": "node evaluation/run.mjs",
+    "example": "node adapter/lifecycle-cli.mjs example",
+    "verify:all": "npm run verify && npm run evaluate && npm run example && npm run next:verify"
   },
-  "devDependencies": { "ajv": "8.17.1", "ajv-formats": "3.0.1" }
+  "devDependencies": {
+    "ajv": "8.17.1",
+    "ajv-formats": "3.0.1"
+  }
 }

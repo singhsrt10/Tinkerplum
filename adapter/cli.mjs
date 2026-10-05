@@ -1,6 +1,6 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { fixtures } from '../fixtures/server.mjs';
+import { fixtures, supportedFixtures } from '../fixtures/server.mjs';
 import { runFixture } from './run.mjs';
 import { validateEvidence } from './validate.mjs';
 
@@ -13,8 +13,8 @@ try {
       console.log(`${path}: valid ${report.schema_version}, ${report.verdict} (${report.scope})`);
     }
   } else {
-    if (!['all', ...fixtures].includes(command) || args.length > 1 || (args.length && args[0] !== '--release')) {
-      throw new Error('Usage: node adapter/cli.mjs <all|portfolio|two-user-broken|two-user-fixed|integration-failure> [--release]');
+    if (!['all', ...supportedFixtures].includes(command) || args.length > 1 || (args.length && args[0] !== '--release')) {
+      throw new Error('Usage: node adapter/cli.mjs <all|portfolio|two-user-broken|two-user-fixed|integration-failure|nextjs-fixed> [--release]');
     }
     mkdirSync('reports', { recursive: true });
     for (const name of command === 'all' ? fixtures : [command]) {

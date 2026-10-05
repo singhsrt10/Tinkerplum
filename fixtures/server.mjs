@@ -1,11 +1,14 @@
 import { createServer } from 'node:http';
 import { readFileSync } from 'node:fs';
+import { startNextFixture } from './next-runner.mjs';
 import { twoUser } from './targets/two-user/app.mjs';
 import { failingIntegration } from './targets/integration/app.mjs';
 
 export const fixtures = ['portfolio', 'two-user-broken', 'two-user-fixed', 'integration-failure'];
+export const supportedFixtures = [...fixtures, 'nextjs-fixed'];
 export async function startFixture(name) {
-  if (!fixtures.includes(name)) throw new Error('Only bundled synthetic fixtures are supported');
+  if (!supportedFixtures.includes(name)) throw new Error('Only bundled synthetic fixtures are supported');
+  if (name === 'nextjs-fixed') return startNextFixture();
   const app = name.startsWith('two-user') ? twoUser({ broken: name.endsWith('broken') })
     : name === 'integration-failure' ? failingIntegration() : null;
   const html = readFileSync(new URL('./targets/portfolio/index.html', import.meta.url), 'utf8');

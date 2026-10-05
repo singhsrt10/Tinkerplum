@@ -17,4 +17,8 @@ The fixture suite uses synthetic data and loopback servers, with an in-process f
 
 The versioned JSON report retains check IDs, candidate/environment/tool information, observations, timestamps, and limits. The validator rejects internally unsupported PASS claims but cannot authenticate fabricated evidence. Unsupported deployment checks stay NOT RUN. Local READY is limited to the fixture contract; release mode requires unavailable deployment evidence and cannot yield READY with that gap.
 
-No arbitrary URL or existing application is supported. In particular, Next.js-specific routing, authentication, and cache behavior are unverified. Do not substitute fixture results for actual project checks or omit the remaining manual ten-area review. Fix/recheck history, freshness enforcement, benchmarking, and pilots are future phases.
+No arbitrary URL or existing application is supported. One optional production-built Next.js fixture exercises actual App Router handlers with synthetic identity and cache boundaries; real authentication, middleware, CDN and deployment behavior remain unverified. Do not substitute fixture results for actual project checks or omit the remaining manual ten-area review.
+
+The clone also includes `npm run example` for hash-linked before/after evidence, `adapter/lifecycle-cli.mjs current` for conservative currentness checks, and `npm run evaluate` for an executed smoke-versus-full-protocol comparison. New evidence uses schema 2.0.0. Clean matching inputs, revision, tools, target/scope and a 24-hour reuse window are required. A historical report can validate structurally while being stale.
+
+The deterministic comparison does not establish model-assisted effectiveness. Actual model-study records, real-user pilots and live production verification are unperformed. Consult the clone's lifecycle/evaluation documentation; do not invent missing results or contact outside users.

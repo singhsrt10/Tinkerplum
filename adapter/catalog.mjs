@@ -28,7 +28,7 @@ export const catalog = [
 ];
 export function applicable(check, fixture) {
   return check.group === 'all' || check.group === 'deployment'
-    || (check.group === 'users' && fixture.startsWith('two-user-'))
+    || (check.group === 'users' && (fixture.startsWith('two-user-') || fixture === 'nextjs-fixed'))
     || (check.group === 'integration' && fixture === 'integration-failure');
 }
 export const critical = (check, scope) => check.group !== 'deployment' || scope === 'release-evidence';

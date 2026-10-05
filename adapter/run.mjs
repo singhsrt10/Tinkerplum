@@ -1,35 +1,29 @@
-import { execFileSync } from 'node:child_process';
-import { createHash } from 'node:crypto';
-import { readFileSync, readdirSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
-import { join } from 'node:path';
 import { createRequire } from 'node:module';
+import { isDeepStrictEqual } from 'node:util';
 import { startFixture } from '../fixtures/server.mjs';
 import { catalog, applicable, critical, verdict } from './catalog.mjs';
 import { probe, sharedCache } from './probe.mjs';
 import { validateEvidence } from './validate.mjs';
-const root = fileURLToPath(new URL('../', import.meta.url));
+import { nextArtifactDigest } from './next-build-state.mjs';
+import { candidate } from './snapshot.mjs';
+export { candidate } from './snapshot.mjs';
 const require = createRequire(import.meta.url);
-export function candidate() {
-  const git = (...args) => execFileSync(process.env.GIT ?? 'git', args, { cwd: root, encoding: 'utf8' }).trim();
-  const hash = createHash('sha256');
-  function include(path) {
-    for (const item of readdirSync(join(root, path), { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
-      const name = join(path, item.name);
-      if (item.isDirectory()) include(name);
-      else if (item.isFile()) hash.update(name).update('\0').update(readFileSync(join(root, name))).update('\0');
-    }
-  }
-  for (const path of ['adapter', 'fixtures', 'schema']) include(path);
-  for (const path of ['package.json', 'package-lock.json']) hash.update(path).update('\0').update(readFileSync(join(root, path))).update('\0');
-  return { revision: git('rev-parse', 'HEAD'), dirty: git('status', '--porcelain').length > 0, source_sha256: hash.digest('hex') };
+// Refuse to label cached imported modules with later on-disk source revisions.
+const loadedSource = candidate().source_sha256;
+export function toolsFor(name) {
+  return { node: process.version, adapter: '0.2.0', ajv: require('ajv/package.json').version,
+    next: name === 'nextjs-fixed' ? require('../fixtures/nextjs/node_modules/next/package.json').version : 'not-used' };
+}
+export function environmentFor(name) {
+  return { kind: 'isolated-loopback', platform: process.platform, arch: process.arch, tools: toolsFor(name),
+    artifact_sha256: name === 'nextjs-fixed' ? nextArtifactDigest() : 'not-used' };
 }
 export async function runFixture(name, scope = 'local-fixture') {
+  if (candidate().source_sha256 !== loadedSource) throw new Error('Source changed since module load; start a fresh process');
   if (!['local-fixture', 'release-evidence'].includes(scope)) throw new Error('Unsupported assessment scope');
   const report = {
-    schema_version: '1.0.0', fixture: name, scope, candidate: candidate(),
-    environment: { kind: 'isolated-loopback', platform: process.platform, arch: process.arch,
-      tools: { node: process.version, adapter: '0.1.0', ajv: require('ajv/package.json').version } },
+    schema_version: '2.0.0', fixture: name, scope, candidate: candidate(),
+    environment: environmentFor(name),
     started_at: new Date().toISOString(), finished_at: '',
     limits: ['Synthetic local HTTP contract only; no production security claim.', 'No browser, TLS, real identity provider, database, CDN, or deployment tested.'],
     checks: [], verdict: 'INSUFFICIENT EVIDENCE',
@@ -69,6 +63,8 @@ export async function runFixture(name, scope = 'local-fixture') {
       check.finished_at = new Date().toISOString(); report.checks.push(check);
     }
   } finally { await server.close(); }
+  if (!isDeepStrictEqual(report.candidate, candidate())) throw new Error('Source changed during execution; rerun evidence collection');
+  if (!isDeepStrictEqual(report.environment, environmentFor(name))) throw new Error('Environment or build changed during execution; rerun');
   report.finished_at = new Date().toISOString();
   report.verdict = verdict(report.checks);
   return validateEvidence(report);
